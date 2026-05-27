@@ -1,9 +1,19 @@
 # Admin Dashboard V1
 
+## Live Demo
+
+https://admin-dashboard-v1-sandy.vercel.app/ 
+
 A functional frontend React-based admin dashboard that consumes
 user data from the JSONplaceholder API. 
 
-key features:
+## Project purpose:
+
+To practice production-style frontend development concepts including
+Routing, Protected Pages, Custom Hooks, API handling, responsive layouts,
+and user management
+
+## key features:
 
 - Navbar with profile, notification and logout sections. Responsive
   spacing and a functional logout flow
@@ -23,7 +33,7 @@ key features:
 
 - User management Table with delete actions and Toast Notifications 
 
-# Tech stack:
+## Tech stack:
 
 - React
 
@@ -32,9 +42,3 @@ key features:
 - React Router
 
 - Vanilla CSS
-
-# Project purpose:
-
-To practice production-style frontend development concepts including
-Routing, Protected Pages, Custom Hooks, API handling, responsive layouts,
-and user management
