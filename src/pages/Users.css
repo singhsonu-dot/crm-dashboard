@@ -1,0 +1,131 @@
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background-color: #1e293b;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: inherit;
+    color: #f1f5f9;
+}
+
+.users-table thead {
+    background-color: #0f172a;
+}
+
+.users-table th {
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    border: 2px solid #334155;
+}
+
+.users-table tbody tr {
+    border-bottom: 1px solid #334155;
+    transition: background-color 0.2s ease;
+}
+
+.users-table td {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.users-table tbody tr:hover {
+    background-color: #2d3748;
+    cursor: pointer;
+}
+
+.users-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: transform 0.1s ease;
+}
+
+.delete-btn:hover {
+    transform: scale(1.2); 
+}
+
+.error-wrapper-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    width: 100%;
+}
+
+.error-card-polished {
+    background-color: #1e293b;
+    padding: 35px 40px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #334155;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.error-card-polished h2 {
+    color: #ef4444;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.error-card-polished p {
+    color: #94a3b8;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.retry-action-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.retry-action-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.retry-action-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    .users-table {
+        min-width: 500px;
+    }
+} 

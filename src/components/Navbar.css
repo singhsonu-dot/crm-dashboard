@@ -1,0 +1,49 @@
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: #1e293b;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #334155;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .navbar h2 {
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .navbar-right {
+        gap: 8px;
+    }
+
+    .navbar-right button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}

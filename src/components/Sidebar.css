@@ -1,0 +1,35 @@
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    width: auto;
+    max-width: 100%;
+    transition: all 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-link:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+.sidebar-link.active-tab {
+    background-color: #3b82f6;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(130, 246,0.25);
+}
