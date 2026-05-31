@@ -1,5 +1,9 @@
 function Loader() {
-    return <h2>Loading...</h2>
+    return (
+        <div className="flex justify-center py-8">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black"></div>
+        </div>
+    )
 }
 
 export default Loader 

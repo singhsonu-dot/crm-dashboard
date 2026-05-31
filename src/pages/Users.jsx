@@ -46,7 +46,7 @@ function Users() {
                 </div>
             ) : (
                 <>
-                 <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Serach users"/>
+                 <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search users"/>
 
                     {filteredUsers.length === 0 ? (
                         <EmptyState message="No users found"/>
