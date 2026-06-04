@@ -6,7 +6,7 @@ function EmptyState({ message }) {
             </h3>
 
             <p className="mt-2 text-sm text-gray-500">
-                Try another search term
+                Try another <search></search>
             </p>
         </div>
     )

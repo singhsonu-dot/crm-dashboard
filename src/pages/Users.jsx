@@ -2,10 +2,10 @@ import { useState } from "react";
 import UseUsers from "../hooks/useUsers";
 import useDebounce from "../hooks/useDebounce";
 import Sidebar from "../components/Sidebar";
-import "./Users.css"
+import Loader from "../components/ui/Loader";
 import SearchBar from "../components/ui/SearchBar";
 import EmptyState from "../components/ui/EmptyState";
-import Loader from "../components/ui/Loader";
+
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 
@@ -29,19 +29,19 @@ function Users() {
     }
 
     return (
-        <div className="layout">
-            <aside className="sidebar-wrapper"><Sidebar/></aside>
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
+            <aside className="w-full bg-slate-800 md:w-[250px] md:min-w-[250px]"><Sidebar/></aside>
 
-            <main className="main-content">
+            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
             <Navbar title="Users"/>
 
             {error ? (
-                <div className="error-wrapper-center">
-                    <div className="error-card-polished">
-                        <h2>Data not loaded</h2>
-                        <p>{error || "Internet not connected"}</p>
+                <div className="flex min-h-[60vh] w-full items-center justify-center">
+                    <div className="max-w-md rounded-x1 border border-slate-700 bg-slate-800 px-10 py-9 text-center shadow-1g">
+                        <h2 className="mb-2 text-x1 font-semibold text-red-500">Data not loaded</h2>
+                        <p className="mb-6 text-sm loading-relaxed text-slate-400">{error || "Internet not connected"}</p>
 
-                        <button aria-label="Retry" className="retry-action-btn" onClick={refetch}>Try again</button>
+                        <button aria-label="Retry" className="rounded-md bg-blue-500 px-5 py-2 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-600" onClick={refetch}>Try again</button>
                     </div>
                 </div>
             ) : (
@@ -51,11 +51,11 @@ function Users() {
                     {filteredUsers.length === 0 ? (
                         <EmptyState message="No users found"/>
                     ) : (
-                        <div className="table-container">
-                            <table className="users-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
+                        <div className="mt-6 w-full overflow-x-auto rounded-1g bg-slate-800">
+                            <table className="w-full border-collapse text-left text-slate-100">
+                                <thead className="bg-slate-900">
+                                    <tr className="border-b border-slate-700 hover:bg-slate-700">
+                                        <th className="border-2 border-slate-700 px-6 py-4 text-sm font-semibold uppercase tracking-wide text-slate-400">Name</th>
                                         <th>Email</th>
                                         <th>Action</th>
                                     </tr>
@@ -64,9 +64,9 @@ function Users() {
                                 <tbody>
                                     {filteredUsers.map((user) => (
                                         <tr key={user.id}>
-                                            <td>{user.name}</td>
+                                            <td className="px-6 py-4 text=[0.95rem]">{user.name}</td>
                                             <td>{user.email}</td>
-                                            <td><button aria-label="Delete User" className="delete-btn" onClick={() => handleDelete(user.id)}>X</button></td>
+                                            <td><button aria-label="Delete User" className="rounded p-1 text-red-400 transition-transform hover:scale-110 hover:text-red-300" onClick={() => handleDelete(user.id)}>X</button></td>
                                         </tr>
                                     ))}
                                 </tbody>

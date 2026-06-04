@@ -1,10 +1,15 @@
-function StatCard({ title, value }) {
+function StatCard({ title, value}) {
     return (
-        <article className="p-6 bg-white rounded-2x1 shadow-sm border border-gray-100 flex flex-col gap-2 transition-all duration-300 hover:shadow-md">
-            <h3 className="text-sm font-medium text-gray-500 tracking-wide">{title}</h3>
-            <p className="text-3x1 font-bold text-gay-900 tracking-tight mt-1">{value}</p>
+        <article className="rounded-x1 bg-slate-800 p-5 shadow-md">
+            <h3 className="mb-2 text-slate-400">
+                {title}
+            </h3>
+
+            <p className="text-3x1 font-bold text-white">
+                {value}
+            </p>
         </article>
     )
 }
 
-export default StatCard 
+export default StatCard

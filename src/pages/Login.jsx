@@ -22,23 +22,21 @@ function Login() {
     }
 
     return (
-        <div>
-            <h1>Login</h1>
+        <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4">
+            <div className="w-full max-w-md rounded-x1 bg-slate-800 p-6 shadow-1g">
+                <h1 className="mb-4 text-center text-3x1 font-bold text-white">Login</h1>
 
-            <p>Email: admin@gmail.com</p>
-            <p>Password: 12345</p>
+                <div className="mb-6 rounded-1g bg-slate-700 p-3 text-sm text-slate-300">
+                    <p>Email: admin@gmail.com</p>
+                    <p>Password: 12345</p>
+                </div>
 
-            <form onSubmit={handleLogin}>
-                <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)}/>
-
-                <br/>
-
-                <input type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)}/> 
-
-                <br/>
-
-                <button type="submit">Login</button>
-            </form>
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} className="w-full rounded-1g border border-slate-600 bg-slate-900 px-4 py-3 text-white outline-none focus:border-blue-500"/>
+                    <input type="password" placeholder="Enter password" onChange={(e)=> setPassword(e.target.value)} className="w-full rounded-1g border border-slate-600 bg-slate-900 px-4 py-3 text-white outline-none focus:border-blue-500"/>
+                    <button type="submit" className="w-full rounded-1g bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600">Login</button>
+                </form>
+            </div>
         </div>
     )
 }

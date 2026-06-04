@@ -1,17 +1,16 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/ui/StatCard";
-import "./Dashboard.css" 
 
 function Dashboard() {
     return (
-        <div className="layout">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
 
-            <aside className="sidebar-wrapper">
+            <aside className="bg-slate-800 p-4 md:min-h-screen md:w-[250px] md:min-w-[250px]">
                 <Sidebar/>
             </aside>
 
-            <main className="main-content">
+            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
 
                 <header>
                     <Navbar title="Admin"/>
@@ -27,10 +26,10 @@ function Dashboard() {
 
                 </section>
 
-                <section className="activity">
+                <section className="mt-10 rounded-1g bg-slate-800 p-5">
                     <h2>Recent Activity</h2>
 
-                    <ul>
+                    <ul className="list-none">
                         <li>User Erin logged in</li>
                         <li>New order created</li>
                         <li>Admin updated dashboard</li>
