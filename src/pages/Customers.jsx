@@ -5,9 +5,9 @@ import Sidebar from "../components/Sidebar";
 import Loader from "../components/ui/Loader";
 import SearchBar from "../components/ui/SearchBar";
 import EmptyState from "../components/ui/EmptyState";
-
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
+import useStore from "../store/useStore";
 
 function Users() {
     const [search, setSearch] = useState("")
@@ -16,9 +16,9 @@ function Users() {
 
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
 
+    const deleteUser = useStore((state) => state.deleteUser)
     const handleDelete = (id) => {
-        const updatedUsers = users.filter((user) => user.id !== id)
-        setUsers(updatedUsers)
+        deleteUser(id)
         toast.success("user deleted") 
     }
 
@@ -33,7 +33,7 @@ function Users() {
             <aside className="w-full bg-slate-800 md:w-[250px] md:min-w-[250px]"><Sidebar/></aside>
 
             <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
-            <Navbar title="Users"/>
+            <Navbar title="Customers"/>
 
             {error ? (
                 <div className="flex min-h-[60vh] w-full items-center justify-center">

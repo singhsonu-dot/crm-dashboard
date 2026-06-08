@@ -1,9 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Users from "./pages/Users";
+import Customers from "./pages/Customers";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
+import Analytics from "./pages/Analytics";
 
 const router = createBrowserRouter([
   {
@@ -19,13 +20,21 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/users",
+    path: "/customers",
     element: (
       <ProtectedRoute>
-        <Users/>
+        <Customers/>
       </ProtectedRoute>
     ),
   },
+  {
+    path: "/analytics",
+    element: (
+      <ProtectedRoute>
+        <Analytics/>
+      </ProtectedRoute>
+    )
+  }
 ])
 
 function App() {

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
+import toast from "react-hot-toast";
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -10,14 +12,12 @@ function Login() {
     const handleLogin = (e) => {
         e.preventDefault() 
 
-        const demoEmail = "admin@gmail.com"
-        const demoPassword = "12345"
+        const success = login(email, password)
 
-        if (email === demoEmail && password === demoPassword) {
-            localStorage.setItem("isAuth", "true")
+        if (success) {
             navigate("/dashboard")
         } else {
-            alert("Invalid credentials")
+            toast.error("Invalid credentials")
         }
     }
 

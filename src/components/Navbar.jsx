@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { logout } from "../services/authService";
 
 function Navbar({ title }) {
     const navigate = useNavigate()
 
     const handleLogout = () => {
-        localStorage.removeItem("isAuth")
+        logout() 
         navigate("/")
     }
 

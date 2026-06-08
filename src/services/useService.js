@@ -1,9 +1,9 @@
+import { apiFetch } from "./apiClient"
+
 export const fetchUsers = async (search) => {
-    const res = await fetch(`https://jsonplaceholder.typicode.com/users?name_like=${search}`) 
-
-    if (!res.ok) {
-        throw new Error("Failed to fetch users")
-    }
-
-    return res.json()
+  return apiFetch(`/users?name_like=${search}`) 
 }
+
+// export const deleteUser = async (id) => {}
+
+// export const getUserById = async (id) => {}

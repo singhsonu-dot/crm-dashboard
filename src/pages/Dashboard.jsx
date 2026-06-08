@@ -29,7 +29,7 @@ function Dashboard() {
                 <section className="mt-10 rounded-1g bg-slate-800 p-5">
                     <h2>Recent Activity</h2>
 
-                    <ul className="list-none">
+                    <ul className="list-none text-slate-300">
                         <li>User Erin logged in</li>
                         <li>New order created</li>
                         <li>Admin updated dashboard</li>
