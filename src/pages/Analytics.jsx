@@ -1,4 +1,4 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/ui/StatCard";
@@ -10,6 +10,15 @@ import StatCard from "../components/ui/StatCard";
         { month: "April", customers: 10 },
         { month: "May", customers: 12 },
         { month: "June", customers: 15 },
+    ];
+
+    const revenueData = [
+        { month: "Jan", revenue: 1200 },
+        { month: "Feb", revenue: 1800 },
+        { month: "March", revenue: 2400 },
+        { month: "April", revenue: 3200 },
+        { month: "May", revenue: 4100 },
+        { month: "June", revenue: 5200 },
     ];
 
 function Analytics() {
@@ -43,6 +52,26 @@ function Analytics() {
                         </LineChart>
                     </ResponsiveContainer>
                    </div>
+                </section>
+
+                <section className="rounded-1g bg-slate-800 p-5">
+                    <h2 className="mb-4 text-1g font-semibold text-white">
+                        Revenue Analytics
+                    </h2>
+
+                    <div className="w-full h-[320px]">
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={revenueData}>
+                                <XAxis dataKey="month" stroke="#94a3b8"/>
+
+                                <YAxis stroke="#94a3b8"/>
+
+                                <Tooltip/>
+
+                                <Bar dataKey="revenue" fill="#22c55e" radius={[4, 4, 0, 0]}/>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 </section>
 
                 <section className="rounded-1g bg-slate-800 p-5">
