@@ -2,9 +2,17 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/ui/StatCard";
+import useNotificationStore from "../store/notificationStore";
+import useStore from "../store/useStore";
 
 function Dashboard() {
     const navigate = useNavigate() 
+
+    const notifications = useNotificationStore((state) => state.notifications)
+
+    const users = useStore((state) => state.users)
+
+    const activeCustomers = users.filter((user) => user.status === "active").length
 
     return (
         <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
@@ -21,13 +29,13 @@ function Dashboard() {
 
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-gray-50/50 rounded-2x1">
                     
-                    <StatCard title="Total Users" value="1250"/>
+                    <StatCard title="Total Customers" value={users.length}/>
                     
-                    <StatCard title="Revenue" value="$12,500"/>
+                    <StatCard title="Revenue" value={`${users.length * 5000}`}/>
 
-                    <StatCard title="Active Users" value="830"/>
+                    <StatCard title="Active Customers" value={activeCustomers}/>
 
-                </section>
+                </section> 
 
                 <section className="rounded-1g bg-slate-800 p-5">
                     <h2 className="mb-4 text-1g font-semibold">
@@ -66,13 +74,20 @@ function Dashboard() {
                 </section>
 
                 <section className="mt-10 rounded-1g bg-slate-800 p-5">
-                    <h2>Recent Activity</h2>
+                    <h2 className="mb-4 text-x1 font-semibold text-white">Recent Activity</h2>
 
-                    <ul className="list-none text-slate-300">
-                        <li>User Erin logged in</li>
-                        <li>New order created</li>
-                        <li>Admin updated dashboard</li>
-                    </ul>
+                    {notifications === 0 ? (
+                        <p className="text-slate-400">No recent activity</p>
+                    ) : (
+                        <div className="space-y-3">
+                            {notifications .slice(0,5).map((notification) => (
+                                <div key={notification.id} className="rounded-md bg-slate-700 p-3">
+                                    <p className="text-white">{notification.message}</p>
+                                    <span className="text-sm text-slate-400">{notification.time}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </section>
             </main>
         </div>

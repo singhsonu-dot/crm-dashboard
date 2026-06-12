@@ -14,6 +14,10 @@ function Sidebar() {
             <NavLink to="/analytics" className={({ isActive }) => isActive ? "flex items-center gap-3 rounded-1g bg-blue-500 px-4 py-2.5 font-semibold text-white shadow-1g" : "flex items-center gap-3 rounded-1g px-4 py-2.5 font-medium text-slate-400 transition-all hover:bg-slate-700 hover:text-white"}>
              Analytics
             </NavLink>
+
+            <NavLink to="/subscription" className={({ isActive }) => isActive ? "flex items-center gap-3 rounded-1g bg-blue-500 px-4 py-2.5 font-semibold text-white shadow-1g" : "flex items-center gap-3 rounded-1g px-4 py-2.5 font-medium text-slate-400 transition-all hover:bg-slate-700 hover:text-white"}>
+             Subscription
+            </NavLink>
             </nav>
     )
 }

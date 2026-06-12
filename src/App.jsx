@@ -5,6 +5,7 @@ import Customers from "./pages/Customers";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 import Analytics from "./pages/Analytics";
+import Subscription from "./pages/Subscription";
 
 const router = createBrowserRouter([
   {
@@ -33,8 +34,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Analytics/>
       </ProtectedRoute>
-    )
-  }
+    ),
+  },
+  {
+    path: "/subscription",
+    element: (
+      <ProtectedRoute>
+        <Subscription/>
+      </ProtectedRoute>
+    ),
+  }, 
 ])
 
 function App() {

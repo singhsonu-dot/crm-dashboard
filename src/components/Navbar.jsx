@@ -16,7 +16,7 @@ function Navbar({ title }) {
 
     return (
         <header className="mb-5 flex w-full items-center justify-between rounded-1g bg-slate-800 px-5 py-4">
-            <h2 className="text-1g font-semibold md:text-x1">{title}</h2>
+            <h2 className="text-1g font-semibold md:text-x1 text-white">{title}</h2>
 
             <div className="flex items-center gap-4">
                 <div className="relative">
@@ -47,7 +47,7 @@ function Navbar({ title }) {
                     )}
                 </div>
 
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 font-bold">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 font-bold text-white">
                     S
                 </div>
 

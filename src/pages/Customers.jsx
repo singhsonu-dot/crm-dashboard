@@ -18,6 +18,7 @@ function Customers() {
             id: Date.now(),
             name,
             email,
+            status: "active",
         })
 
         addNotification("Customer added")
@@ -29,11 +30,50 @@ function Customers() {
         setShowModal(false)
     }
 
+    const handleEdit = (user) => {
+        setEditingId(user.id)
+
+        setName(user.name)
+        setEmail(user.email)
+
+        setIsEditing(true)
+        setShowModal(true)
+    }
+
+    const handleUpdateCustomer = () => {
+        updateUser({
+            id: editingId,
+            name,
+            email,
+        })
+
+        addNotification("Customer updated")
+        toast.success("Customer updated")
+
+        setName("")
+        setEmail("")
+
+        setEditingId(null)
+        setIsEditing(false)
+        setShowModal(false)
+    }
+
+    const handleStatusToggle = (user) => {
+        toggleStatus(user.id)
+
+        addNotification(`Customer${user.status === "active" ? "inactive" : "active"}`)
+
+        toast.success("Status updated")
+    }
+
     const [showModal, setShowModal] = useState(false)
 
     const [name, setName] = useState("")
 
     const [email, setEmail] = useState("")
+
+    const [isEditing, setIsEditing] = useState(false)
+    const [editingId, setEditingId] = useState(null)
 
     const [search, setSearch] = useState("")
 
@@ -42,7 +82,9 @@ function Customers() {
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
 
     const addUser = useStore((state) => state.addUser)
+    const updateUser = useStore((state) => state.updateUser)
     const deleteUser = useStore((state) => state.deleteUser)
+    const toggleStatus = useStore((state) => state.toggleStatus)
     const addNotification = useNotificationStore((state) => state.addNotification)
     const handleDelete = (id) => {
         deleteUser(id)
@@ -73,10 +115,14 @@ function Customers() {
                     </div>
                 </div>
             ) : (
-                <div className="w-full md:max-w-md">
-                 <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search users"/>
+                <>
+                <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="w-full md:max-w-md">
+                        <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placehholder="Search Customers"/>
+                    </div>
 
-                    <button onClick={() =>setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">+ Add Customers</button>
+                    <button onClick={() => setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">+ Add Customers</button>
+                </div> 
 
                     {filteredUsers.length === 0 ? (
                         <EmptyState message="No users found"/>
@@ -89,18 +135,28 @@ function Customers() {
                                         <th className="px-6 py-4">Email</th>
                                         <th className="px-6 py-4">Phone</th>
                                         <th className="px-6 py-4">Website</th> 
-                                        <th className="px-6 py-4 text-center">Action</th>
+                                        <th className="px-6 py-4">Status</th>
                                     </tr>
                                 </thead>
 
                                 <tbody className="divide-y divide-slate-700">
                                     {filteredUsers.map((user) => (
                                         <tr key={user.id} className = "hover:bg-slate-700/50 transition-colors">
-                                            <td className="px-6 py-4 text=[0.95rem] whitespace-nowrap font-medium">{user.name}</td>
+                                            <td className="px-6 py-4 text-center">{user.name}
+                                                <div className="flex justify-center gap-3">
+                                                    <button onClick={() => handleEdit(user)} className="text-blue-400">Edit</button>
+                                                    <button onClick={() => handleDelete(user.id)} className="text-red-400">X</button>
+                                                    <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
+                                                        <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
+                                                    </button>
+                                                </div>
+                                            </td>
                                             <td className="px-6 py-4 text-slate-300">{user.email}</td>
                                             <td className="px-6 py-4 text-slate-300 whitespace-nowrap">{user.phone}</td>
                                             <td className="px-6 py-4 text-slate-400">{user.website}</td>
-                                            <td className="px-6 py-4 text-center"><button aria-label="Delete User" className="rounded p-1 text-red-400 transition-transform hover:scale-110 hover:text-red-300" onClick={() => handleDelete(user.id)}>X</button></td>
+                                            <td className="px-6 py-4 text-slate-400">
+                                                <div className={`rounded-full px-3 py-1 text-xs font-semibold ${user.status === "active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>{user.status}</div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -119,12 +175,13 @@ function Customers() {
                                 <div className="flex justify-end gap-2">
                                     <button onClick={() => setShowModal(false)} className="rounded bg-slate-600 px-4 py-2">Cancel</button>
 
-                                    <button onClick={handleAddCustomer} className="rounded bg-slate-500 px-4 py-2 text-white">Save</button>
+                                    <button onClick={isEditing ? handleUpdateCustomer : handleAddCustomer} className="rounded bg-slate-500 px-4 py-2 text-white">{isEditing ? "Update" : "Save"}</button>
                                 </div>
                             </div>
                         </div> 
                     )}
-                </div>
+                
+                </>
             )}
             </main>
         </div>
