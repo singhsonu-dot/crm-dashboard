@@ -2,6 +2,7 @@ import toast from "react-hot-toast"
 import useNotificationStore from "../store/notificationStore"
 import Sidebar from "../components/Sidebar"
 import Navbar from "../components/Navbar"
+import { useState } from "react"
 
 function Subscription() {
     const plans = [
@@ -31,6 +32,8 @@ function Subscription() {
         },
     ]
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
     const addNotification = useNotificationStore((state) => state.addNotification)
 
     const handlePlanSelect = (planName) => {
@@ -39,16 +42,29 @@ function Subscription() {
     }
 
     return (
-        <div>
-            <aside className="bg-slate-800 p-4 md:min-h-screen md:w-[250px]"><Sidebar/></aside>
+        <div className="flex flex-col md:flex-row min-h-screen text-white md:overflow-hidden">
+             <>
+            <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+                <Sidebar/>
+            </aside>
 
-            <main className="flex flex-1 flex-col p-5">
+            {isSidebarOpen && (
+                <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                    <div className="flex justify-end p-4">
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button>
+                    </div>
+                    <Sidebar/>
+                </aside>
+            )}
+            </>
+
+            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
                 <header>
-                    <Navbar title="Subscription"/>
+                    <Navbar title="Subscription" toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}/>
                 </header>
 
                 <section className="mt-6">
-                    <h2 className="mb-2 text-3x1 font-bold text-white">
+                    <h2 className="text-3x1 font-bold text-white">
                         Subscription Plans
                     </h2>
 

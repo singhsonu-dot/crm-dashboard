@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 import useStore from "../store/useStore";
 import useNotificationStore from "../store/notificationStore";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 function Customers() {
     const handleAddCustomer = () => {
@@ -66,6 +67,8 @@ function Customers() {
         toast.success("Status updated")
     }
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
     const [showModal, setShowModal] = useState(false)
 
     const [name, setName] = useState("")
@@ -76,6 +79,9 @@ function Customers() {
     const [editingId, setEditingId] = useState(null)
 
     const [search, setSearch] = useState("")
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const usersPerPage = 5
 
     const debouncedSearch = useDebounce(search, 500)
 
@@ -94,16 +100,36 @@ function Customers() {
 
     const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
 
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage)
+    const startIndex = (currentPage - 1) * usersPerPage
+    const paginatedUsers = filteredUsers.slice(
+        startIndex, 
+        startIndex + usersPerPage
+    )
+
     if (loading) {
         return <Loader/>
     }
 
     return (
         <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
-            <aside className="w-full bg-slate-800 md:w-[250px] md:min-w-[250px]"><Sidebar/></aside>
+            <>
+                        <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+                            <Sidebar/>
+                        </aside>
+            
+                        {isSidebarOpen && (
+                            <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                                <div className="flex justify-end p-4">
+                                    <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button>
+                                </div>
+                                <Sidebar/>
+                            </aside>
+                        )}
+                        </> 
 
             <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
-            <Navbar title="Customers"/>
+            <Navbar title="Customers" toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}/>
 
             {error ? (
                 <div className="flex min-h-[60vh] w-full items-center justify-center">
@@ -118,7 +144,10 @@ function Customers() {
                 <>
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div className="w-full md:max-w-md">
-                        <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placehholder="Search Customers"/>
+                        <SearchBar value={search} onChange={(e) => {
+                            setSearch(e.target.value)
+                            setCurrentPage(1)
+                        }} placehholder="Search Customers"/>
                     </div>
 
                     <button onClick={() => setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">+ Add Customers</button>
@@ -140,12 +169,14 @@ function Customers() {
                                 </thead>
 
                                 <tbody className="divide-y divide-slate-700">
-                                    {filteredUsers.map((user) => (
+                                    {paginatedUsers.map((user) => (
                                         <tr key={user.id} className = "hover:bg-slate-700/50 transition-colors">
                                             <td className="px-6 py-4 text-center">{user.name}
                                                 <div className="flex justify-center gap-3">
                                                     <button onClick={() => handleEdit(user)} className="text-blue-400">Edit</button>
-                                                    <button onClick={() => handleDelete(user.id)} className="text-red-400">X</button>
+                                                    <button onClick={() => handleDelete(user.id)} className="text-red-400">
+                                                        <RiDeleteBin6Line/>
+                                                    </button>
                                                     <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
                                                         <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
                                                     </button>
@@ -163,6 +194,25 @@ function Customers() {
                             </table>
                         </div>
                     )}
+
+                    <div className="mt-6 flex items-center justify-center gap-4">
+                        <button onClick={() => setCurrentPage(
+                            (prev) => Math.max(prev - 1, 1)
+                        )}
+                        disabled={currentPage === 1} className="rounded-md bg-slate-700 px-4 py-2 text-white disabled:opacity-50">Previous</button>
+
+                        <span className="text-white">
+                            Page {currentPage} of {totalPages}
+                        </span>
+
+                        <button onClick={() => setCurrentPage(
+                            (prev) => Math.min(
+                                prev + 1,
+                                totalPages
+                            )
+                        )}
+                        disabled={currentPage === totalPages} className="rounded-md bg-slate-700 px-4 py-2 texxt-white disabled:opacity-50">Next</button>
+                    </div>
 
                     {showModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

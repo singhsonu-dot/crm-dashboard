@@ -2,6 +2,7 @@ import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/ui/StatCard";
+import { useState } from "react";
 
   const chartData = [
         { month: "Jan", customers: 4 },
@@ -22,13 +23,27 @@ import StatCard from "../components/ui/StatCard";
     ];
 
 function Analytics() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
         <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
-            <aside className="w-full bg-slate-800 md:w-[250px] md:min-w-[250px]"><Sidebar/></aside>
+            <>
+            <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+                <Sidebar/>
+            </aside>
+
+            {isSidebarOpen && (
+                <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                    <div className="flex justify-end p-4">
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button>
+                    </div>
+                    <Sidebar/>
+                </aside>
+            )}
+            </>
 
             <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
-                <Navbar title="Analytics"/>
+                <Navbar title="Analytics" toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}/>
 
                 <section className="grid gap-4 sm:grid-cols-2 x1:grid-cols-4">
                     <StatCard title="Total customers" value="10"/>

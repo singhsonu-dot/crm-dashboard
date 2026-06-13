@@ -6,11 +6,17 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
 import Analytics from "./pages/Analytics";
 import Subscription from "./pages/Subscription";
+import Settings from "./pages/Settings";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login/>,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword/>
   },
   {
     path: "/dashboard",
@@ -41,6 +47,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Subscription/>
+      </ProtectedRoute>
+    ),
+  }, 
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <Settings/>
       </ProtectedRoute>
     ),
   }, 

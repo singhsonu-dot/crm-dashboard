@@ -34,7 +34,24 @@ function Login() {
                 <form onSubmit={handleLogin} className="space-y-4">
                     <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} className="w-full rounded-1g border border-slate-600 bg-slate-900 px-4 py-3 text-white outline-none focus:border-blue-500"/>
                     <input type="password" placeholder="Enter password" onChange={(e)=> setPassword(e.target.value)} className="w-full rounded-1g border border-slate-600 bg-slate-900 px-4 py-3 text-white outline-none focus:border-blue-500"/>
+                    <button type="button" onClick={() => navigate("/forgot-password")} className="text-sm text-blue-400 hover:underline">Forgot Password?</button>
                     <button type="submit" className="w-full rounded-1g bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600">Login</button>
+
+                    <div className="my-6 flex items-center">
+                        <div className="h-px flex-1 bg-slate-600"></div>
+
+                        <span className="px-4 text-sm text-slate-400">OR</span>
+                        <div className="h-px flex-1 bg-slate-600"></div>
+                    </div>
+
+                    <button type="button" onClick={() => toast("Google Login coming in V3")} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
+                         Continue with Google 
+                    </button>
+
+                    <button type="button" onClick={() => toast("Github Login coming in V3")} className="w-full rounded-1g border border-slate-600 py-3 font-medium text-white transition hover:bg-slate-700">
+                        Continue with Github
+                    </button>
+                    
                 </form>
             </div>
         </div>
