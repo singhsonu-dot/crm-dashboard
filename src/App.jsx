@@ -1,15 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Users from "./pages/Users";
+import Customers from "./pages/Customers";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import "./App.css"
 import { Toaster } from "react-hot-toast";
+import Analytics from "./pages/Analytics";
+import Subscription from "./pages/Subscription";
+import Settings from "./pages/Settings";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login/>,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword/>
   },
   {
     path: "/dashboard",
@@ -20,13 +27,37 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/users",
+    path: "/customers",
     element: (
       <ProtectedRoute>
-        <Users/>
+        <Customers/>
       </ProtectedRoute>
     ),
   },
+  {
+    path: "/analytics",
+    element: (
+      <ProtectedRoute>
+        <Analytics/>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/subscription",
+    element: (
+      <ProtectedRoute>
+        <Subscription/>
+      </ProtectedRoute>
+    ),
+  }, 
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <Settings/>
+      </ProtectedRoute>
+    ),
+  }, 
 ])
 
 function App() {

@@ -1,9 +1,10 @@
-function SearchBar({ value, onChange, placeholder }) {
+function SearchBar({ value, onChange, placehholder }) {
     return (
-        <>
-        <label htmlFor="search">Search Users</label> 
-        <input id="search" type="text" value={value} onChange={onChange} placeholder={placeholder}/>
-        </>
+        <div className="mb-4 flex flex-col gap-2">
+            <label htmlFor="search" className="text-sm font-medium text-gray-600"/>
+
+            <input id="search" type="text" value={value} onChange={onChange} placeholder={placehholder}/>
+        </div>
     )
 }
 

@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { fetchUsers } from "../services/useService";
+import useStore from "../store/useStore";
 
 function useUsers(search) {
-    const [users, setUsers] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
+    const users = useStore((state) => state.users)
+    const loading = useStore((state) => state.loading)
+    const error = useStore((state) => state.error)
+
+    const setUsers = useStore((state) => state.setUsers)
+    const setLoading = useStore((state) => state.setLoading)
+    const setError = useStore((state) => state.setError)
 
         const getUsers = async () => {
             setLoading(true)
