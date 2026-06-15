@@ -18,7 +18,7 @@ function Dashboard() {
     const activeCustomers = users.filter((user) => user.status === "active").length
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden text-white">
             <>
             <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
                 <Sidebar/>

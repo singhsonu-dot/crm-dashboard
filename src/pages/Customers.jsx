@@ -112,7 +112,7 @@ function Customers() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden text-white">
             <>
                         <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
                             <Sidebar/>
@@ -173,11 +173,11 @@ function Customers() {
                                         <tr key={user.id} className = "hover:bg-slate-700/50 transition-colors">
                                             <td className="px-6 py-4 text-center">{user.name}
                                                 <div className="flex justify-center gap-3">
-                                                    <button onClick={() => handleEdit(user)} className="text-blue-400">Edit</button>
-                                                    <button onClick={() => handleDelete(user.id)} className="text-red-400">
+                                                    <button onClick={() => handleEdit(user)} aria-label={`Edit ${user.name}`} className="text-blue-400">Edit</button>
+                                                    <button onClick={() => handleDelete(user.id)} aria-label={`Delete ${user.name}`} className="text-red-400">
                                                         <RiDeleteBin6Line/>
                                                     </button>
-                                                    <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
+                                                    <button onClick={() => handleStatusToggle(user)} aria-label={`Toggle status for ${user.name}`} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
                                                         <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
                                                     </button>
                                                 </div>
@@ -219,11 +219,14 @@ function Customers() {
                             <div className="w-full max-w-md rounded-1g bg-slate-800 p-6">
                                 <h2 className="mb-4 text-x1 font-semibold text-white">Add Customer</h2>
 
-                                <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
-                                <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
+                                <label htmlFor="customer-name">Customer Name</label>
+                                <input type="text" id="customer-name" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
+
+                                <label htmlFor="customer-email">Customer Email</label>
+                                <input type="text" id="customer-email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
 
                                 <div className="flex justify-end gap-2">
-                                    <button onClick={() => setShowModal(false)} className="rounded bg-slate-600 px-4 py-2">Cancel</button>
+                                    <button aria-label="cancel" onClick={() => setShowModal(false)} className="rounded bg-slate-600 px-4 py-2">Cancel</button>
 
                                     <button onClick={isEditing ? handleUpdateCustomer : handleAddCustomer} className="rounded bg-slate-500 px-4 py-2 text-white">{isEditing ? "Update" : "Save"}</button>
                                 </div>

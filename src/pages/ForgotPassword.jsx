@@ -28,7 +28,8 @@ function ForgotPassword() {
                 </p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <input type="email" placeholder="Email Address" {...register("email", {
+                    <label htmlFor="reset-email"/>
+                    <input id="reset-email" type="email" placeholder="Email Address" {...register("email", {
                         required: "Email is required"
                     })}
                     className="w-full rounded-1g p-3 text-white"/>
@@ -39,11 +40,11 @@ function ForgotPassword() {
                         </p>
                     )}
 
-                    <button type="submit" className="w-full rounded-1g bg-blue-500 py-3 font-medium text-white transition hover:bg-blue-600">
+                    <button type="submit" aria-label="Send reset link" className="w-full rounded-1g bg-blue-500 py-3 font-medium text-white transition hover:bg-blue-600">
                         Send Reset Link 
                     </button>
 
-                    <button type="button" onClick={() => navigate("/")} className="mt-4 w-full text-sm text-slate-400 hover:text-white">
+                    <button type="button" aria-label="back to login" onClick={() => navigate("/")} className="mt-4 w-full text-sm text-slate-400 hover:text-white">
                         Back To Login 
                     </button>
                 </form>

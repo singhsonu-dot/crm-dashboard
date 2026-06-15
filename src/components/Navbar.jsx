@@ -18,7 +18,7 @@ function Navbar({ title, toggleSidebar }) {
     return (
         <header className="mb-5 flex w-full items-center justify-between gap-3 rounded-1g bg-slate-800 px-5 py-4">
             <div className="flex items-center gap-3">
-                <button onClick={toggleSidebar} className="md:hidden text-white">
+                <button onClick={toggleSidebar} aria-label="Open menu" className="md:hidden text-white">
                     <FaBars size={20}/>
                 </button>
             </div> 
@@ -26,7 +26,7 @@ function Navbar({ title, toggleSidebar }) {
 
             <div className="flex items-center gap-4">
                 <div className="relative">
-                    <button onClick={() => setShowNotifications(!showNotifications)} className="rounded-md relative bg-slate-700 p-2">
+                    <button aria-label="Notifications" onClick={() => setShowNotifications(!showNotifications)} className="rounded-md relative bg-slate-700 p-2">
                         <FaBell size={18}/>
 
                         {notifications.length > 0 && (

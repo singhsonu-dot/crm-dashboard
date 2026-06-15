@@ -68,7 +68,7 @@ function Subscription() {
                         Subscription Plans
                     </h2>
 
-                    <p className="mb-8 text-slate-400">
+                    <p className="mb-8 text-black">
                         Choose the plan that best fits 
                         your business. 
                     </p>
