@@ -44,7 +44,7 @@ function Settings() {
     }
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen">
+        <div className="flex flex-col md:flex-row text-white min-h-screen">
             <>
             <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
                 <Sidebar/>
@@ -70,7 +70,7 @@ function Settings() {
                         Settings
                     </h1>
 
-                    <p className="mt-2 text-slate-400">
+                    <p className="mt-2 text-black">
                         Manage your profile settings. 
                     </p>
                 </section>
@@ -84,7 +84,7 @@ function Settings() {
                         <input {...register("name", {
                             required: "Name is required",
                         })}
-                        placeholder="Name" className="w-full-rounded-1g p-3 text-black"/>
+                        placeholder="Name" className="w-full-rounded-1g p-3 text-slate-300"/>
 
                         {errors.name && (
                             <p className="mt-1 text-sm text-red-400"> 
@@ -95,7 +95,7 @@ function Settings() {
                         <input {...register("email", {
                             required: "Email is required",
                         })}
-                        placeholder="Email" className="w-full rounded-1g p-3 text-black"/>
+                        placeholder="Email" className="w-full rounded-1g p-3 text-slate-300"/>
 
                         {errors.email && (
                             <p className="text-red-400">
@@ -103,9 +103,9 @@ function Settings() {
                             </p>
                         )}
 
-                        <input {...register("phone")} placeholder="Phone" className="w-full rounded-1g p-3 text-black"/>
+                        <input {...register("phone")} placeholder="Phone" className="w-full rounded-1g p-3 text-slate-300"/>
 
-                        <textarea {...register("bio")} placeholder="Bio" rows="4" className="w-full rounded-1g p-3 text-black"/>
+                        <textarea {...register("bio")} placeholder="Bio" rows="4" className="w-full rounded-1g p-3 text-slate-300"/>
 
                         <button type="submit" className="rounded-1g bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600">Save Changes</button>
                     </form>

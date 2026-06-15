@@ -26,7 +26,7 @@ function Analytics() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-white md:overflow-hidden">
             <>
             <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
                 <Sidebar/>
