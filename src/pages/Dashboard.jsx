@@ -77,7 +77,7 @@ function Dashboard() {
                             </p>
                         </button>
 
-                        <button onClick={() =>navigate("/subscription")} className="rounded-1g bg-slate-700 p-4 text-left transition hover:bg-slate-600">
+                        <button onClick={() => navigate("/subscription")} className="rounded-1g bg-slate-700 p-4 text-left transition hover:bg-slate-600">
                             <h3 className="font-semibold">Subscription</h3>
                             <p className="mt-1 text-sm text-slate-400">
                                 Manage plans 

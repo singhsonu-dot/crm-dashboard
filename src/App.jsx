@@ -8,6 +8,7 @@ import Analytics from "./pages/Analytics";
 import Subscription from "./pages/Subscription";
 import Settings from "./pages/Settings";
 import ForgotPassword from "./pages/ForgotPassword";
+import Signup from "./pages/Signup";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     path: "/forgot-password",
     element: <ForgotPassword/>
   },
+  {
+    path: "/Signup",
+    element: <Signup/>
+  }, 
   {
     path: "/dashboard",
     element: (

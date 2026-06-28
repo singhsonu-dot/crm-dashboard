@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { fetchUsers } from "../services/useService";
+import { getCustomers } from "../services/customerService";
 import useStore from "../store/useStore";
 
 function useUsers(search) {
@@ -16,7 +16,7 @@ function useUsers(search) {
             setError("")
 
             try {
-                const data = await fetchUsers(search)
+                const data = await getCustomers() 
                 setUsers(data)
             } catch (err) {
                 setError(err.message)

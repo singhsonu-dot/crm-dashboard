@@ -9,26 +9,32 @@ import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 import useStore from "../store/useStore";
 import useNotificationStore from "../store/notificationStore";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiDeleteBin6Line } from "react-icons/ri"; 
+import { addCustomer } from "../services/customerService";
 
 function Customers() {
-    const handleAddCustomer = () => {
-        if (!name || !email) return
+    const handleAddCustomer = async () => {
+        if (!name || !email) return 
 
-        addUser({
-            id: Date.now(),
-            name,
-            email,
-            status: "active",
-        })
+        try {
+            const newCustomer = await addCustomer({
+                name,
+                email,
+                phone: "",
+                website: "",
+                status: "active",
+            })
 
-        addNotification("Customer added")
+            setUsers([...users, newCustomer])
+            addNotification("Customer added")
+            toast.success("Customer added")
 
-        toast.success("Customer added")
-
-        setName("")
-        setEmail("")
-        setShowModal(false)
+            setName("")
+            setEmail("")
+            setShowModal(false)
+        } catch (err) {
+            toast.error(err.message)
+        }
     }
 
     const handleEdit = (user) => {
@@ -87,6 +93,8 @@ function Customers() {
 
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
 
+    console.log(users)
+
     const addUser = useStore((state) => state.addUser)
     const updateUser = useStore((state) => state.updateUser)
     const deleteUser = useStore((state) => state.deleteUser)
@@ -98,7 +106,12 @@ function Customers() {
         toast.success("user deleted") 
     }
 
-    const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+    const filteredUsers = users.filter(
+        (user) =>
+        (user.name ?? "")
+          .toLowerCase()
+          .includes((debouncedSearch ?? "").toLowerCase())
+    )
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage)
     const startIndex = (currentPage - 1) * usersPerPage

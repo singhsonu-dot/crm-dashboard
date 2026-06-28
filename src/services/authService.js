@@ -1,19 +1,42 @@
-export const login = (email, password) => {
-    const demoEmail = "admin@gmail.com"
-    const demoPassword = "12345"
+import supabase from "../lib/supabase"
 
-    if (email === demoEmail && password === demoPassword) {
-        localStorage.setItem("isAuth", "true")
-        return true
+export const login = async (email, password) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+
+    console.log(data)
+    console.error(error) 
+
+    if (error) {
+        throw error;
     }
 
-    return false
-}
+    return data;
+};
 
-export const logout = () => {
-    localStorage.removeItem("isAuth")
-}
+export const logout = async () => {
+    await supabase.auth.signOut();
+};
 
-export const isAuthenticated = () => {
-    return localStorage.getItem("isAuth") === "true"
-}
+export const isAuthenticated = async () => {
+    const {
+        data: { session },
+    } = await supabase.auth.getSession();
+
+    return ! !session; 
+}; 
+
+export const signUp = async (email, password) => {
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+    });
+
+    if (error) {
+        throw error;
+    }
+
+    return data; 
+}; 
