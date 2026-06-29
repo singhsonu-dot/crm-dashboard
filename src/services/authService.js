@@ -6,9 +6,6 @@ export const login = async (email, password) => {
         password,
     });
 
-    console.log(data)
-    console.error(error) 
-
     if (error) {
         throw error;
     }
@@ -25,7 +22,7 @@ export const isAuthenticated = async () => {
         data: { session },
     } = await supabase.auth.getSession();
 
-    return ! !session; 
+    return !!session; 
 }; 
 
 export const signUp = async (email, password) => {

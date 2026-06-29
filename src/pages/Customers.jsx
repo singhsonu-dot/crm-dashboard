@@ -11,6 +11,9 @@ import useStore from "../store/useStore";
 import useNotificationStore from "../store/notificationStore";
 import { RiDeleteBin6Line } from "react-icons/ri"; 
 import { addCustomer } from "../services/customerService";
+import { updateCustomer } from "../services/customerService";
+import { deleteCustomer } from "../services/customerService";
+import { toggleCustomerStatus } from "../services/customerService";
 
 function Customers() {
     const handleAddCustomer = async () => {
@@ -47,12 +50,13 @@ function Customers() {
         setShowModal(true)
     }
 
-    const handleUpdateCustomer = () => {
-        updateUser({
-            id: editingId,
+    const handleUpdateCustomer = async () => {
+        await updateCustomer(editingId, {
             name,
             email,
         })
+
+        await refetch();
 
         addNotification("Customer updated")
         toast.success("Customer updated")
@@ -65,11 +69,15 @@ function Customers() {
         setShowModal(false)
     }
 
-    const handleStatusToggle = (user) => {
-        toggleStatus(user.id)
+    const handleStatusToggle = async (user) => {
+        await toggleCustomerStatus(
+            user.id,
+            user.status === "active" ? "inactive" : "active"
+        );
+
+        await refetch();
 
         addNotification(`Customer${user.status === "active" ? "inactive" : "active"}`)
-
         toast.success("Status updated")
     }
 
@@ -92,16 +100,16 @@ function Customers() {
     const debouncedSearch = useDebounce(search, 500)
 
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
-
-    console.log(users)
-
+    
     const addUser = useStore((state) => state.addUser)
     const updateUser = useStore((state) => state.updateUser)
     const deleteUser = useStore((state) => state.deleteUser)
     const toggleStatus = useStore((state) => state.toggleStatus)
     const addNotification = useNotificationStore((state) => state.addNotification)
-    const handleDelete = (id) => {
-        deleteUser(id)
+
+    const handleDelete = async (id) => {
+        await deleteCustomer(id);
+        await refetch();
         addNotification("Customer deleted")
         toast.success("user deleted") 
     }
