@@ -9,6 +9,8 @@ import Subscription from "./pages/Subscription";
 import Settings from "./pages/Settings";
 import ForgotPassword from "./pages/ForgotPassword";
 import Signup from "./pages/Signup";
+import useThemeStore from "./store/themeStore";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +68,17 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+  const isDark = useThemeStore((state) => state.isDark);
+
+  useEffect(() => {
+    const root = window.document.documentElement; 
+    if (isDark) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark"); 
+    }
+  }, [isDark]); 
+
   return (
     <>
       <Toaster/>
