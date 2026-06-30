@@ -68,13 +68,37 @@ import { FaArrowUp } from "react-icons/fa6";
                 { month: "Fri", customers: 5 },
             ],
             revenueChart: [
-                { monyh: "Mon", revenue: 150 },
-                { monyh: "Tue", revenue: 180 },
-                { monyh: "Wed", revenue: 220 },
-                { monyh: "Thu", revenue: 160 },
-                { monyh: "Fri", revenue: 190 },
-            ],
-        }, 
+  {
+    month: "Mon",
+    subscriptions: 80,
+    services: 40,
+    support: 30,
+  },
+  {
+    month: "Tue",
+    subscriptions: 90,
+    services: 50,
+    support: 40,
+  },
+  {
+    month: "Wed",
+    subscriptions: 120,
+    services: 60,
+    support: 40,
+  },
+  {
+    month: "Thu",
+    subscriptions: 100,
+    services: 40,
+    support: 20,
+  },
+  {
+    month: "Fri",
+    subscriptions: 130,
+    services: 50,
+    support: 30,
+  },
+], 
 
         "Last 30 Days": {
             totalCustomers: 10,
