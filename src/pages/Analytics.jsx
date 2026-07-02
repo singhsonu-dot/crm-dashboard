@@ -5,6 +5,7 @@ import StatCard from "../components/ui/StatCard";
 import { useState } from "react";
 import { FaChartLine, FaHandshake, FaUserPlus } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa6";
+import Loader from "../components/ui/Loader";
 
   const chartData = [
         { month: "Jan", customers: 4 },
@@ -68,38 +69,38 @@ import { FaArrowUp } from "react-icons/fa6";
                 { month: "Fri", customers: 5 },
             ],
             revenueChart: [
-  {
-    month: "Mon",
-    subscriptions: 80,
-    services: 40,
-    support: 30,
-  },
-  {
-    month: "Tue",
-    subscriptions: 90,
-    services: 50,
-    support: 40,
-  },
-  {
-    month: "Wed",
-    subscriptions: 120,
-    services: 60,
-    support: 40,
-  },
-  {
-    month: "Thu",
-    subscriptions: 100,
-    services: 40,
-    support: 20,
-  },
-  {
-    month: "Fri",
-    subscriptions: 130,
-    services: 50,
-    support: 30,
-  },
-], 
-
+                {
+                    month: "Mon",
+                    subscriptions: 80,
+                    services: 40,
+                    support: 30,
+                },
+                {
+                    month: "Tue",
+                    subscriptions: 90,
+                    services: 50,
+                    support: 40,
+                },
+                {
+                    month: "Wed",
+                    subscriptions: 120,
+                    services: 60,
+                    support: 40,
+                },
+                 {
+                    month: "Thu",
+                    subscriptions: 100,
+                    services: 40,
+                    support: 20,
+                },
+                 {
+                    month: "Fri",
+                    subscriptions: 130,
+                    services: 50,
+                    support: 30,
+                },
+            ]
+        },
         "Last 30 Days": {
             totalCustomers: 10,
             activeCustomers: 8,
@@ -122,14 +123,39 @@ import { FaArrowUp } from "react-icons/fa6";
                 { month: "Fri", customers: 30 },
             ],
             revenueChart: [
-                { month: "Mon", revenue: 250 },
-                { month: "Tue", revenue: 300 },
-                { month: "Wed", revenue: 280 },
-                { month: "Thu", revenue: 350 },
-                { month: "Fri", revenue: 450 },
+                   {
+                    month: "Mon",
+                    subscriptions: 120,
+                    services: 80,
+                    support: 50,
+                },
+                {
+                    month: "Tue",
+                    subscriptions: 150,
+                    services: 90,
+                    support: 60,
+                },
+                {
+                    month: "Wed",
+                    subscriptions: 170,
+                    services: 100,
+                    support: 70,
+                },
+                 {
+                    month: "Thu",
+                    subscriptions: 220,
+                    services: 120,
+                    support: 90,
+                },
+                 {
+                    month: "Fri",
+                    subscriptions: 280,
+                    services: 150,
+                    support: 120,
+                },
             ],
-        },
-    };
+        }
+    }; 
 
     const performanceData = [
         {
@@ -199,38 +225,44 @@ function Analytics() {
     const currentData = analyticsData[dateRange]
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-white md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-black dark:text-white md:overflow-hidden">
             <>
-            <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+            <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                 <Sidebar/>
+
+                <div className="mt-auto border-t border-slate-700 pt-4">
+                    <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
+                        Dark Mode 
+                    </button>
+                </div>
             </aside>
 
             {isSidebarOpen && (
-                <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                <aside className="fixed inset-0 z-50 bg-white dark:bg-slate-800 md:hidden">
                     <div className="flex justify-end p-4">
-                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button>
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
                     </div>
                     <Sidebar/>
                 </aside>
             )}
             </>
 
-            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
+            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5 bg-white dark:bg-slate-900">
                 <Navbar title="Analytics" toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}/>
 
-                <section className="flex flex-col gap-4 rounded-1g bg-slate-800 p-5 md:flex-row md:items-center md:justify-between">
+                <section className="flex flex-col gap-4 rounded-1g bg-white dark:bg-slate-800 p-5 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <h2 className="text-2x1 font-bold text-white">
+                        <h2 className="text-2x1 font-bold text-black dark:text-white">
                             Analytics Overview
                         </h2>
 
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-black dark:text-slate-400">
                             Track customer growth and 
                             revenue performance. 
                         </p>
                     </div>
 
-                    <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className="rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-white outline-none">
+                    <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className="rounded-md border border-slate-600 bg-gray-100 dark:bg-slate-700 px-4 py-2 text-black dark:text-white outline-none">
                         <option>Last 7 Days</option>
                         <option>Last 30 Days</option>
                         <option>Last 90 Days</option>
@@ -245,7 +277,7 @@ function Analytics() {
                     <StatCard title="Growth Rate" value={currentData.growth}/>
                 </section>
 
-                <section className="rounded-1g bg-slate-800 p-5">
+                <section className="rounded-1g bg-gray-100 dark:bg-slate-800 p-5">
                     <h2 className="mb-4 text-1g font-semibold">
                         Customer Growth 
                     </h2>
@@ -262,13 +294,13 @@ function Analytics() {
                    </div>
                 </section>
 
-                <section className="rounded-1g bg-slate-800 p-5">
+                <section className="rounded-1g bg-gray-100 dark:bg-slate-800 p-5">
                     <div className="mb-4 flex items-center justify-between">
                         <h2 className="text-1g font-semibold text-slate-900 dark:text-white">
                             Revenue Analytics
                         </h2>
 
-                        <button onClick={handleExportCSV} className="rounded-1g bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
+                        <button onClick={handleExportCSV} className="rounded-1g bg-gray-100 dark:bg-blue-500 px-4 py-2 text-sm font-medium text-black dark:text-white transition hover:bg-slate-200 dark:hover:bg-blue-600">
                             Export CSV
                         </button>
                     </div>
@@ -291,25 +323,25 @@ function Analytics() {
                     </div>
                 </section>
 
-                <section className="rounded-1g bg-slate-800 p-5">
-                    <h2 className="mb-4 text-1g font-semibold text-white">
+                <section className="rounded-1g bg-gray-100 dark:bg-slate-800 p-5">
+                    <h2 className="mb-4 text-1g font-semibold text-black dark:text-white">
                         Recent Prformance
                     </h2>
 
                     <div className="grid gap-4 sm:grid-cols-2">
                         {performanceData.map((item) => (
-                            <div key={item.id} className="rounded-1g border border-slate-700 bg-slate-700 p-4 transition hover:bg-slate-600">
+                            <div key={item.id} className="rounded-1g border border-slate-700 bg-gray-100 dark:bg-slate-700 p-4 transition hover:bg-slate-600">
                                 <div className="flex items-start gap-3">
                                     <span className="text-2x1">
                                         {item.icon}
                                     </span>
 
                                     <div>
-                                        <h3 className="font-semibold text-white">
+                                        <h3 className="font-semibold text-black dark:text-white">
                                             {item.title}
                                         </h3>
 
-                                        <p className="mt-1 text-sm text-slate-300">
+                                        <p className="mt-1 text-sm text-black dark:text-white">
                                             {item.description}
                                         </p>
                                     </div>

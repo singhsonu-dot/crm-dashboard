@@ -5,10 +5,10 @@ import StatCard from "../components/ui/StatCard";
 import useNotificationStore from "../store/notificationStore";
 import useStore from "../store/useStore";
 import { useState } from "react";
+import Loader from "../components/ui/Loader";
 
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
     const navigate = useNavigate() 
 
     const notifications = useNotificationStore((state) => state.notifications)
@@ -18,16 +18,22 @@ function Dashboard() {
     const activeCustomers = users.filter((user) => user.status === "active").length
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-white md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-black dark:text-white md:overflow-hidden">
             <>
-            <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+            <aside className="hidden bg-gray-100 dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                 <Sidebar/>
+
+                <div className="mt-auto border-t border-slate-700 pt-4">
+                    <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
+                        Dark Mode 
+                    </button>
+                </div>
             </aside>
 
             {isSidebarOpen && (
-                <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                <aside className="fixed inset-0 z-50 bg-gray-100 dark:bg-slate-800 md:hidden">
                     <div className="flex justify-end p-4">
-                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button> 
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button> 
                     </div>
                     <Sidebar/>
                 </aside>

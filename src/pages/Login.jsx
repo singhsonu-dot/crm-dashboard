@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/authService";
+import { login, signInWithGoogle } from "../services/authService";
 import toast from "react-hot-toast";
+import supabase from "../lib/supabase";
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -20,6 +21,19 @@ function Login() {
             toast.error(error.message)
         }
     }
+
+    const handleGoogleLogin = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo: window.location.origin,
+            },
+        });
+
+        if (error) {
+            toast.error(error.message);
+        }
+    }; 
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4">
@@ -45,7 +59,7 @@ function Login() {
                         <div className="h-px flex-1 bg-slate-600"></div>
                     </div>
 
-                    <button type="button" onClick={() => toast("Google Login coming in V3")} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
+                    <button type="button" onClick={handleGoogleLogin} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
                          Continue with Google 
                     </button>
 

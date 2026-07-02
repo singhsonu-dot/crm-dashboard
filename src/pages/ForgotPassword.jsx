@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import { resetPassword } from "../services/authService"
 
 function ForgotPassword() {
     const navigate = useNavigate()
@@ -11,9 +12,13 @@ function ForgotPassword() {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
-        toast.success("Reset link sent")
-        navigate("/login")
+    const onSubmit = async (data) => {
+        try {
+            await resetPassword(data.email);
+            toast.success("Check your email for the reset link.");
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     return (
