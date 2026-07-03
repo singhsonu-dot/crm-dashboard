@@ -1,16 +1,17 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Customers from "./pages/Customers";
+const Login = lazy(() => import("./pages/Login"))
+const Dashboard = lazy(() => import("./pages/Dashboard"))
+const Customers = lazy(() => import("./pages/Customers"))
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
-import Analytics from "./pages/Analytics";
-import Subscription from "./pages/Subscription";
-import Settings from "./pages/Settings";
-import ForgotPassword from "./pages/ForgotPassword";
-import Signup from "./pages/Signup";
+const Analytics = lazy(() => import("./pages/Analytics"))
+const Subscription = lazy(() => import("./pages/Subscription"))
+const Settings = lazy(() => import("./pages/Settings"))
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"))
+const Signup = lazy(() => import( "./pages/Signup"))
 import useThemeStore from "./store/themeStore";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import Loader from "./components/ui/Loader";
 
 const router = createBrowserRouter([
   {
@@ -83,7 +84,9 @@ function App() {
     <>
       <Toaster/>
 
-      <RouterProvider router={router}/>
+      <Suspense fallback={<Loader/>}> 
+        <RouterProvider router={router}/> 
+      </Suspense>
     </>
   )
 }

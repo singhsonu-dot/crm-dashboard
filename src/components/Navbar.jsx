@@ -1,27 +1,16 @@
- import { useNavigate } from "react-router-dom";
-import { logout } from "../services/authService";
 import { useState } from "react";
 import useNotificationStore from "../store/notificationStore";
 import { FaBars, FaBell, FaMoon, FaSun } from "react-icons/fa";
-import useThemeStore from "../store/themeStore";
 import useStore from "../store/useStore";
 import useRoleStore from "../store/useRoleStore";
 
 function Navbar({ title, toggleSidebar }) {
-    const navigate = useNavigate()
     const [showNotifications, setShowNotifications] = useState(false)
 
     const notifications = useNotificationStore((state) => state.notifications)
     const profile = useStore((state) => state.profile)
-    const isDark = useThemeStore((state) => state.isDark) 
-    const toggleTheme = useThemeStore((state) => state.toggleTheme)
     const role = useRoleStore((state) => state.role)
     const setRole = useRoleStore((state) => state.setRole)
-
-    const handleLogout = () => {
-        logout() 
-        navigate("/")
-    }
 
     return (
         <header className="mb-5 flex w-full items-center justify-between gap-2 rounded-1g bg-gray-100 dark:bg-slate-800 px-3 py-4">
@@ -67,15 +56,11 @@ function Navbar({ title, toggleSidebar }) {
                     )}
                 </div>
 
-                <button onClick={toggleTheme} className="rounded-md bg-slate-200 dark:bg-slate-700 p-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
-                    {isDark ? <FaSun size={18}/> : <FaMoon size={18} />}
-                </button>
-
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 font-bold text-black dark:text-white">
                     {profile.name.charAt(0).toUpperCase()}
                 </div>
 
-                <div className="hidden md:block text-right">
+                <div className="hidden 1g:block text-right">
                     <p className="text-sm font-medium text-black dark:text-white">
                         {profile.name}
                     </p>
@@ -85,12 +70,10 @@ function Navbar({ title, toggleSidebar }) {
                     </p>
                 </div> 
 
-                <select value={role} onChange={(e) => setRole(e.target.value)} className="rounded-md bg-gray-100 dark:bg-slate-700 px-3 py-2 text-sm text-black dark:text-white">
+                <select value={role} onChange={(e) => setRole(e.target.value)} className="hidden md:block rounded-md bg-gray-100 dark:bg-slate-700 px-3 py-2 text-sm text-black dark:text-white">
                     <option value="admin">Admin</option>
                     <option value="viewer">Viewer</option>
                 </select>
-
-                <button onClick={handleLogout} className="rounded-md bg-blue-500 px-2 py-2 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
             </div>
         </header>
     )
