@@ -1,35 +1,23 @@
-import { useEffect } from "react";
-import { fetchUsers } from "../services/useService";
-import useStore from "../store/useStore";
+import { useQuery } from "@tanstack/react-query";
+import { getCustomers } from "../services/customerService";
 
 function useUsers(search) {
-    const users = useStore((state) => state.users)
-    const loading = useStore((state) => state.loading)
-    const error = useStore((state) => state.error)
+        const {
+            data = [],
+            isLoading,
+            error,
+            refetch,
+        } = useQuery({
+            queryKey: ["customers"],
+            queryFn: getCustomers,
+        })
 
-    const setUsers = useStore((state) => state.setUsers)
-    const setLoading = useStore((state) => state.setLoading)
-    const setError = useStore((state) => state.setError)
-
-        const getUsers = async () => {
-            setLoading(true)
-            setError("")
-
-            try {
-                const data = await fetchUsers(search)
-                setUsers(data)
-            } catch (err) {
-                setError(err.message)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        useEffect(() => {
-            getUsers()
-        }, [search])
-
-    return { users, loading, error, setUsers, refetch: getUsers}
+    return {
+        users: data, 
+        loading: isLoading,
+        error: error?.message || "", 
+        refetch, 
+    }
 }
 
 export default useUsers

@@ -2,6 +2,12 @@ import { create } from "zustand";
 
 const useStore = create((set) => ({
     users: [],
+
+    profile: {
+        name: "Sonu Kumar",
+        email: "kumarsonu956034@gmail.com",
+    },
+
     loading: false,
     error: "",
 
@@ -34,6 +40,13 @@ const useStore = create((set) => ({
         : user 
         ),
     })),
+
+    updateProfile: (data) => set((state) => ({
+        profile: {
+            ...state.profile,
+            ...data,
+        },
+    })), 
 }))
 
 export default useStore 

@@ -1,9 +1,14 @@
 function Loader() {
     return (
-        <div className="flex min-h-[200px] items-center justify-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-700 border-t-blue-500"></div>
+        <div className="animate-pulse space-y-4">
+            <div className="h-10 w-1/3 rounded bg-slate-700"></div>
+            <div className="spcae-y-3">
+                {[...Array(5)].map((_, index) => (
+                    <div key={index} className="h-14 rounded bg-slate-700"></div>
+                ))}
+            </div>
         </div>
-    )
+    ) 
 }
 
 export default Loader

@@ -9,26 +9,46 @@ import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 import useStore from "../store/useStore";
 import useNotificationStore from "../store/notificationStore";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiDeleteBin6Line } from "react-icons/ri"; 
+import { addCustomer } from "../services/customerService";
+import { updateCustomer } from "../services/customerService";
+import { deleteCustomer } from "../services/customerService";
+import { toggleCustomerStatus } from "../services/customerService";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useRoleStore from "../store/useRoleStore";
 
 function Customers() {
-    const handleAddCustomer = () => {
-        if (!name || !email) return
+    const addCustomerMutation = useMutation({
+        mutationFn: addCustomer,
 
-        addUser({
-            id: Date.now(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["customers"],
+            });
+
+            addNotification("Customer added")
+            toast.success("Customer added")
+
+            setName("")
+            setEmail("")
+            setShowModal(false)
+        },
+
+        onError: (err) => {
+            toast.error(err.message)
+        },
+    })
+
+    const handleAddCustomer = async () => {
+        if (!name || !email) return 
+
+        addCustomerMutation.mutate({
             name,
             email,
+            phone: "",
+            website: "", 
             status: "active",
-        })
-
-        addNotification("Customer added")
-
-        toast.success("Customer added")
-
-        setName("")
-        setEmail("")
-        setShowModal(false)
+        });
     }
 
     const handleEdit = (user) => {
@@ -41,64 +61,110 @@ function Customers() {
         setShowModal(true)
     }
 
-    const handleUpdateCustomer = () => {
-        updateUser({
+    const updateCustomerMutation = useMutation({
+        mutationFn: ({ id, data }) => updateCustomer(id, data),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["customers"],
+            });
+
+            addNotification("Customers updated")
+            toast.success("Customers updated")
+
+            setName("")
+            setEmail("")
+            setEditingId(null)
+            setIsEditing(false)
+            setShowModal(false)
+        },
+
+        onError: (err) => {
+            toast.error(err.message)
+        }, 
+    })
+
+    const handleUpdateCustomer = async () => {
+        updateCustomerMutation.mutate({
             id: editingId,
-            name,
-            email,
+            data: {
+                name,
+                email,
+            }, 
         })
-
-        addNotification("Customer updated")
-        toast.success("Customer updated")
-
-        setName("")
-        setEmail("")
-
-        setEditingId(null)
-        setIsEditing(false)
-        setShowModal(false)
     }
 
-    const handleStatusToggle = (user) => {
-        toggleStatus(user.id)
+    const toggleStatusMutation = useMutation({
+        mutationFn: ({ id, status }) =>
+            toggleCustomerStatus(id, status),
 
-        addNotification(`Customer${user.status === "active" ? "inactive" : "active"}`)
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["customers"],
+            })
 
-        toast.success("Status updated")
+            addNotification("Customer status updated")
+            toast.success("Customer status updated")
+        },
+
+        onError: (err) => {
+            toast.error(err.message)
+        }
+    })
+
+    const handleStatusToggle = async (user) => {
+        toggleStatusMutation.mutate({
+            id: user.id,
+            status: user.status === "active" ? "inactive" : "active", 
+        })
     }
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
     const [showModal, setShowModal] = useState(false)
-
     const [name, setName] = useState("")
-
     const [email, setEmail] = useState("")
-
     const [isEditing, setIsEditing] = useState(false)
     const [editingId, setEditingId] = useState(null)
-
     const [search, setSearch] = useState("")
-
     const [currentPage, setCurrentPage] = useState(1)
     const usersPerPage = 5
+
+    const queryClient = useQueryClient()
 
     const debouncedSearch = useDebounce(search, 500)
 
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
 
-    const addUser = useStore((state) => state.addUser)
-    const updateUser = useStore((state) => state.updateUser)
-    const deleteUser = useStore((state) => state.deleteUser)
-    const toggleStatus = useStore((state) => state.toggleStatus)
     const addNotification = useNotificationStore((state) => state.addNotification)
-    const handleDelete = (id) => {
-        deleteUser(id)
-        addNotification("Customer deleted")
-        toast.success("user deleted") 
+    const role = useRoleStore((state) => state.role)
+
+    const deleteCustomerMutation = useMutation(({
+        mutationFn: deleteCustomer,
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["customers"],
+            });
+
+            addNotification("Customer delete")
+            toast.success("Customer delete")
+        },
+
+        onError: (err) => {
+            toast.error(err.message)
+        },
+    }))
+    
+    const handleDelete = async (id) => {
+        deleteCustomerMutation.mutate(id)
     }
 
-    const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+    const filteredUsers = users.filter(
+        (user) =>
+        (user.name ?? "")
+          .toLowerCase()
+          .includes((debouncedSearch ?? "").toLowerCase())
+    )
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage)
     const startIndex = (currentPage - 1) * usersPerPage
@@ -112,23 +178,29 @@ function Customers() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-white md:overflow-hidden">
+        <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-black dark:text-white md:overflow-hidden">
             <>
-                        <aside className="hidden bg-slate-800 p-4 md:block md:min-h-screen md:w-[250px] md:min-w-[250px]">
+                        <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                             <Sidebar/>
+
+                            <div className="mt-auto border-t border-slate-700 pt-4">
+                                <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
+                                  Dark Mode 
+                                </button>
+                            </div>
                         </aside>
             
                         {isSidebarOpen && (
-                            <aside className="fixed inset-0 z-50 bg-slate-800 md:hidden">
+                            <aside className="fixed inset-0 z-50 bg-white dark:bg-slate-800 md:hidden">
                                 <div className="flex justify-end p-4">
-                                    <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-white">X</button>
+                                    <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
                                 </div>
                                 <Sidebar/>
                             </aside>
                         )}
                         </> 
 
-            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5">
+            <main className="flex flex-1 flex-col gap-5 p-4 md:overflow-y-auto md:p-5 bg-white dark:bg-slate-900">
             <Navbar title="Customers" toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}/>
 
             {error ? (
@@ -150,16 +222,20 @@ function Customers() {
                         }} placehholder="Search Customers"/>
                     </div>
 
-                    <button onClick={() => setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">+ Add Customers</button>
+                    {role === "admin" && (
+                        <button onClick={() => setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                            + Add Customer
+                        </button>
+                    )}
                 </div> 
 
                     {filteredUsers.length === 0 ? (
                         <EmptyState message="No users found"/>
                     ) : (
-                        <div className="mt-6 w-full overflow-x-auto rounded-1g bg-slate-800 shadow-md">
-                            <table className="w-full border-collapse text-left text-slate-100 min-w-[700px] md:min-w-full">
-                                <thead className="bg-slate-900">
-                                    <tr className="border-b border-slate-700 text-xs uppercase tracking-wide text-slate-400">
+                        <div className="mt-6 w-full overflow-x-auto rounded-1g bg-white dark:bg-slate-900 shadow-md">
+                            <table className="w-full border-collapse text-left text-black dark:text-white min-w-187.5 md:min-w-full">
+                                <thead className="bg-gray-100 dark:bg-slate-600">
+                                    <tr className="border-b border-slate-700 text-xs uppercase tracking-wide text-black dark:text-white">
                                         <th className="px-6 py-4">Name</th>
                                         <th className="px-6 py-4">Email</th>
                                         <th className="px-6 py-4">Phone</th>
@@ -173,19 +249,29 @@ function Customers() {
                                         <tr key={user.id} className = "hover:bg-slate-700/50 transition-colors">
                                             <td className="px-6 py-4 text-center">{user.name}
                                                 <div className="flex justify-center gap-3">
-                                                    <button onClick={() => handleEdit(user)} className="text-blue-400">Edit</button>
-                                                    <button onClick={() => handleDelete(user.id)} className="text-red-400">
-                                                        <RiDeleteBin6Line/>
-                                                    </button>
-                                                    <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
-                                                        <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
-                                                    </button>
+                                                    {role === "admin" && (
+                                                        <button onClick={() => handleEdit(user)} className="text-blue-400">
+                                                            Edit
+                                                        </button>
+                                                    )}
+
+                                                    {role === "admin" && (
+                                                        <button onClick={() => handleDelete(user.id)} className="text-red-400">
+                                                            <RiDeleteBin6Line/>
+                                                        </button>
+                                                    )}
+                                                    
+                                                    {role === "admin" && (
+                                                        <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
+                                                            <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-slate-300">{user.email}</td>
-                                            <td className="px-6 py-4 text-slate-300 whitespace-nowrap">{user.phone}</td>
-                                            <td className="px-6 py-4 text-slate-400">{user.website}</td>
-                                            <td className="px-6 py-4 text-slate-400">
+                                            <td className="px-6 py-4 text-black dark:text-slate-300">{user.email}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-300 whitespace-nowrap">{user.phone}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-400">{user.website}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-400">
                                                 <div className={`rounded-full px-3 py-1 text-xs font-semibold ${user.status === "active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>{user.status}</div>
                                             </td>
                                         </tr>
@@ -199,9 +285,9 @@ function Customers() {
                         <button onClick={() => setCurrentPage(
                             (prev) => Math.max(prev - 1, 1)
                         )}
-                        disabled={currentPage === 1} className="rounded-md bg-slate-700 px-4 py-2 text-white disabled:opacity-50">Previous</button>
+                        disabled={currentPage === 1} className="rounded-md bg-gray-100 dark:bg-slate-700 px-4 py-2 text-black dark:text-white disabled:opacity-50">Previous</button>
 
-                        <span className="text-white">
+                        <span className="text-shadow-black dark:text-white">
                             Page {currentPage} of {totalPages}
                         </span>
 
@@ -211,7 +297,7 @@ function Customers() {
                                 totalPages
                             )
                         )}
-                        disabled={currentPage === totalPages} className="rounded-md bg-slate-700 px-4 py-2 texxt-white disabled:opacity-50">Next</button>
+                        disabled={currentPage === totalPages} className="rounded-md bg-gray-100 dark:bg-slate-700 px-4 py-2 text-black dark:text-white disabled:opacity-50">Next</button>
                     </div>
 
                     {showModal && (
