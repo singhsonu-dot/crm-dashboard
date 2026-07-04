@@ -3,9 +3,12 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/ui/StatCard";
 import { useState } from "react";
-import { FaChartLine, FaHandshake, FaUserPlus } from "react-icons/fa";
+import { FaChartLine, FaHandshake, FaMoon, FaSun, FaUserPlus } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa6";
 import Loader from "../components/ui/Loader";
+import useThemeStore from "../store/themeStore";
+import { logout } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
   const chartData = [
         { month: "Jan", customers: 4 },
@@ -223,6 +226,13 @@ function Analytics() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [dateRange, setDateRange] = useState("Last 7 Days")
     const currentData = analyticsData[dateRange]
+    const navigate = useNavigate()
+    const isDark = useThemeStore((state) => state.isDark) 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+    const handleLogout = () => {
+            logout() 
+            navigate("/")
+        }
 
     return (
         <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-black dark:text-white md:overflow-hidden">
@@ -230,10 +240,12 @@ function Analytics() {
             <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                 <Sidebar/>
 
-                <div className="mt-auto border-t border-slate-700 pt-4">
-                    <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
-                        Dark Mode 
+                <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                    <button onClick={toggleTheme} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-slate-200 dark:bg-slate-700 p-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
+                      {isDark ? <FaSun size={18}/> : <FaMoon size={18} />}
                     </button>
+                    <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-blue-500 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
+                
                 </div>
             </aside>
 
@@ -243,6 +255,15 @@ function Analytics() {
                         <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
                     </div>
                     <Sidebar/>
+
+                    <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                        <button onClick={toggleTheme} className="flex w-full items-center gap-3 rounded-md bg-slate-200 dark:bg-slate-700 py-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-sm font-medium text-black dark:text-white">
+                           Dark Mode {isDark ? <FaSun size={18}/> : <FaMoon size={18}/>} 
+                        </button>
+                        <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md bg-blue-500 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
+                            Logout
+                        </button>
+                    </div>
                 </aside>
             )}
             </>
