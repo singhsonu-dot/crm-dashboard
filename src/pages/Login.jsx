@@ -25,6 +25,18 @@ function Login() {
         }
     }, [navigate])
 
+    useEffect(() => {
+        const check = async () => {
+            const {
+                data: { session },
+            } = await supabase.auth.getSession()
+
+            console.log("SESSION:", session)
+        }
+
+        check()
+    }, [])
+
     const handleLogin = async (e) => {
         e.preventDefault() 
 
