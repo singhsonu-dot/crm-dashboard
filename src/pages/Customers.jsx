@@ -22,9 +22,17 @@ import { logout } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 function Customers() {
+    const resetForm = () => {
+        setName("")
+        setEmail("")
+        setPhone("")
+        setWebsite("")
+        setEditingId(null)
+        setIsEditing(false)
+        setShowModal(false)
+    }
     const addCustomerMutation = useMutation({
         mutationFn: addCustomer,
-
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["customers"],
@@ -32,10 +40,7 @@ function Customers() {
 
             addNotification("Customer added")
             toast.success("Customer added")
-
-            setName("")
-            setEmail("")
-            setShowModal(false)
+            resetForm()
         },
 
         onError: (err) => {
@@ -49,17 +54,19 @@ function Customers() {
         addCustomerMutation.mutate({
             name,
             email,
-            phone: "",
-            website: "", 
+            phone: phone || "",
+            website: website || "", 
             status: "active",
         });
     }
 
     const handleEdit = (user) => {
         setEditingId(user.id)
+        setName(user.name || "")
+        setEmail(user.email || "")
 
-        setName(user.name)
-        setEmail(user.email)
+        setPhone(user.phone || "")
+        setWebsite(user.website || "")
 
         setIsEditing(true)
         setShowModal(true)
@@ -75,12 +82,7 @@ function Customers() {
 
             addNotification("Customers updated")
             toast.success("Customers updated")
-
-            setName("")
-            setEmail("")
-            setEditingId(null)
-            setIsEditing(false)
-            setShowModal(false)
+            resetForm()
         },
 
         onError: (err) => {
@@ -94,6 +96,8 @@ function Customers() {
             data: {
                 name,
                 email,
+                phone: phone || "",
+                website: website || "",
             }, 
         })
     }
@@ -127,6 +131,8 @@ function Customers() {
     const [showModal, setShowModal] = useState(false)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+    const [website, setWebsite] = useState("")
     const [isEditing, setIsEditing] = useState(false)
     const [editingId, setEditingId] = useState(null)
     const [search, setSearch] = useState("")
@@ -135,18 +141,20 @@ function Customers() {
     const navigate = useNavigate()
 
     const queryClient = useQueryClient()
-
     const debouncedSearch = useDebounce(search, 500)
-
     const { users, loading, error, setUsers, refetch } = UseUsers(debouncedSearch)
 
     const addNotification = useNotificationStore((state) => state.addNotification)
     const role = useRoleStore((state) => state.role)
     const isDark = useThemeStore((state) => state.isDark) 
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
-    const handleLogout = () => {
-        logout() 
-        navigate("/")
+    const handleLogout = async () => {
+        try {
+            await logout()
+            navigate("/", { replace: true })
+        } catch (error) {
+            toast.error(error)
+        }
     }
 
     const deleteCustomerMutation = useMutation(({
@@ -174,10 +182,10 @@ function Customers() {
         (user) =>
         (user.name ?? "")
           .toLowerCase()
-          .includes((debouncedSearch ?? "").toLowerCase())
+          .includes((debouncedSearch ?? "").toLowerCase()) || [] 
     )
 
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage)
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage) || 1 
     const startIndex = (currentPage - 1) * usersPerPage
     const paginatedUsers = filteredUsers.slice(
         startIndex, 
@@ -244,7 +252,7 @@ function Customers() {
                     </div>
 
                     {role === "admin" && (
-                        <button onClick={() => setShowModal(true)} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                        <button onClick={() => { resetForm(); setShowModal(true); }} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                             + Add Customer
                         </button>
                     )}
@@ -290,8 +298,8 @@ function Customers() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-black dark:text-slate-300">{user.email}</td>
-                                            <td className="px-6 py-4 text-black dark:text-slate-300 whitespace-nowrap">{user.phone}</td>
-                                            <td className="px-6 py-4 text-black dark:text-slate-400">{user.website}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-300 whitespace-nowrap">{user.phone || "-"}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-400">{user.website || "-"}</td>
                                             <td className="px-6 py-4 text-black dark:text-slate-400">
                                                 <div className={`rounded-full px-3 py-1 text-xs font-semibold ${user.status === "active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>{user.status}</div>
                                             </td>
@@ -324,13 +332,15 @@ function Customers() {
                     {showModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                             <div className="w-full max-w-md rounded-1g bg-slate-800 p-6">
-                                <h2 className="mb-4 text-x1 font-semibold text-white">Add Customer</h2>
+                                <h2 className="mb-4 text-x1 font-semibold text-white">{isEditing ? "Edit Customer" : "Add Customer"}</h2>
 
                                 <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
                                 <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
+                                <input type="text" placeholder="Phone (optional)" value={phone} onChange={(e) => setPhone(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
+                                <input type="text" placeholder="Website (optional)" value={website} onChange={(e) => setWebsite(e.target.value)} className="mb-3 w-full rounded border border-slate-600 bg-slate-700 p-2 text-white"/>
 
                                 <div className="flex justify-end gap-2">
-                                    <button onClick={() => setShowModal(false)} className="rounded bg-slate-600 px-4 py-2">Cancel</button>
+                                    <button onClick={resetForm} className="rounded bg-slate-600 px-4 py-2">Cancel</button>
 
                                     <button onClick={isEditing ? handleUpdateCustomer : handleAddCustomer} className="rounded bg-slate-500 px-4 py-2 text-white">{isEditing ? "Update" : "Save"}</button>
                                 </div>

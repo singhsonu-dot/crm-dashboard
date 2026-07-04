@@ -223,16 +223,20 @@ function Analytics() {
         URL.revokeObjectURL(url);
     };
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const [dateRange, setDateRange] = useState("Last 7 Days")
-    const currentData = analyticsData[dateRange]
-    const navigate = useNavigate()
-    const isDark = useThemeStore((state) => state.isDark) 
-    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
-    const handleLogout = () => {
-            logout() 
-            navigate("/")
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+     const [dateRange, setDateRange] = useState("Last 7 Days")
+     const currentData = analyticsData[dateRange]
+     const navigate = useNavigate()
+     const isDark = useThemeStore((state) => state.isDark) 
+     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+     const handleLogout = async () => {
+        try {
+            await logout()
+            navigate("/", { replace: true })
+        } catch (error) {
+            toast.error(error)
         }
+    }
 
     return (
         <div className="flex min-h-screen flex-col md:h-screen md:flex-row text-black dark:text-white md:overflow-hidden">

@@ -54,9 +54,13 @@ function Subscription() {
     const addNotification = useNotificationStore((state) => state.addNotification)
     const isDark = useThemeStore((state) => state.isDark)
     const toggleTheme = useThemeStore((state) => state.toggleTheme)
-    const handleLogout = () => {
-        logout()
-        navigate("/")
+    const handleLogout = async () => {
+        try {
+            await logout()
+            navigate("/", { replace: true })
+        } catch (error) {
+            toast.error(error)
+        }
     }
 
     const handlePlanSelect = (planName) => {

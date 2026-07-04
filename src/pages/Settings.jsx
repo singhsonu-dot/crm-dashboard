@@ -31,14 +31,18 @@ function Settings() {
         formState: { errors: passwordErrors },
     } = useForm()
 
-    const addNotification = useNotificationStore((state) => state.addNotification)
-    const updateProfile = useStore((state) => state.updateProfile)
-    const role = useRoleStore((state) => state.role)
-    const isDark = useThemeStore((state) => state.isDark) 
-    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
-    const handleLogout = () => {
-        logout() 
-        navigate("/")
+     const addNotification = useNotificationStore((state) => state.addNotification)
+     const updateProfile = useStore((state) => state.updateProfile)
+     const role = useRoleStore((state) => state.role)
+     const isDark = useThemeStore((state) => state.isDark) 
+     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+     const handleLogout = async () => {
+        try {
+            await logout()
+            navigate("/", { replace: true })
+        } catch (error) {
+            toast.error(error)
+        }
     }
 
     const newPassword = watch("newPassword")
