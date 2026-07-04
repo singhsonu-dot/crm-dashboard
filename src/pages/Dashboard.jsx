@@ -9,6 +9,7 @@ import Loader from "../components/ui/Loader";
 import useThemeStore from "../store/themeStore";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { logout } from "../services/authService";
+import useUsers from "../hooks/useUsers"
 
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -18,8 +19,8 @@ function Dashboard() {
     const users = useStore((state) => state.users)
     const isDark = useThemeStore((state) => state.isDark) 
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
-    const activeCustomers = users.filter((user) => user.status === "active").length
-    console.log(users)
+    const activeCustomers = users.filter(user => user.status === "active").length
+    const { users, loading } = useUsers("")
 
     const handleLogout = async () => {
         try {
@@ -28,6 +29,10 @@ function Dashboard() {
         } catch (error) {
             console.error(error)
         }
+    }
+
+    if (loading) {
+        <Loader/>
     }
 
     return (
