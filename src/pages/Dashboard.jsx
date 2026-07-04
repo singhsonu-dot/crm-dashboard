@@ -16,7 +16,7 @@ function Dashboard() {
     const navigate = useNavigate() 
 
     const notifications = useNotificationStore((state) => state.notifications)
-    const users = useStore((state) => state.users)
+    const storeUsers = useStore((state) => state.users)
     const isDark = useThemeStore((state) => state.isDark) 
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
     const activeCustomers = users.filter(user => user.status === "active").length
