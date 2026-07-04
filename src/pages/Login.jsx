@@ -13,28 +13,15 @@ function Login() {
 
     useEffect(() => {
         const checkSession = async () => {
-           const {
-             data: { session },
-           } = await supabase.auth.getSession()
-
-           console.log("SESSION:", session)
-
-           if (session) {
-              navigate("/dashboard")
-           }
-        }
-    }, [navigate])
-
-    useEffect(() => {
-        const check = async () => {
             const {
                 data: { session },
             } = await supabase.auth.getSession()
 
-            console.log("SESSION:", session)
+            if (session) {
+                navigate("/dashboard", { replace: true })
+            }
         }
-
-        check()
+        checkSession()
     }, [])
 
     const handleLogin = async (e) => {
