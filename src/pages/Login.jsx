@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login, signInWithGoogle } from "../services/authService";
 import toast from "react-hot-toast";
 import supabase from "../lib/supabase";
+import { FcGoogle } from "react-icons/fc";
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -60,7 +61,8 @@ function Login() {
                     </div>
 
                     <button type="button" onClick={handleGoogleLogin} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
-                         Continue with Google 
+                        <FcGoogle size={20}/>
+                        <span>Continue with Google</span>
                     </button>
 
                     <button type="button" onClick={() => toast("Github Login coming in V3")} className="w-full rounded-1g border border-slate-600 py-3 font-medium text-white transition hover:bg-slate-700">
