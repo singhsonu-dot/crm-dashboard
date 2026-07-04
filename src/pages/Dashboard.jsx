@@ -20,9 +20,13 @@ function Dashboard() {
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
     const activeCustomers = users.filter((user) => user.status === "active").length
 
-    const handleLogout = () => {
-        logout() 
-        navigate("/")
+    const handleLogout = async () => {
+        try {
+            await logout()
+            navigate("/", { replace: true })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
