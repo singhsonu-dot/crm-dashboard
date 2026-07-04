@@ -271,7 +271,7 @@ function Customers() {
                                             <td className="px-6 py-4 text-center">{user.name}
                                                 <div className="flex justify-center gap-3">
                                                     {role === "admin" && (
-                                                        <button onClick={() => handleEdit(user)} className="text-blue-400">
+                                                        <button onClick={() => handleEdit(user)} className="text-black dark:text-blue-400">
                                                             Edit
                                                         </button>
                                                     )}
