@@ -17,6 +17,8 @@ function Login() {
              data: { session },
            } = await supabase.auth.getSession()
 
+           console.log("SESSION:", session)
+
            if (session) {
               navigate("/dashboard")
            }
