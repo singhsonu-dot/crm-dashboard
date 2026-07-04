@@ -19,6 +19,7 @@ function Dashboard() {
     const isDark = useThemeStore((state) => state.isDark) 
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
     const activeCustomers = users.filter((user) => user.status === "active").length
+    console.log(users)
 
     const handleLogout = async () => {
         try {
