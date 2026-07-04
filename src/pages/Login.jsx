@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { login, signInWithGithub, signInWithGoogle } from "../services/authService";
 import toast from "react-hot-toast";
 import supabase from "../lib/supabase";
-import { FcGoogle, FaGithub } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa6";
 
 function Login() {
     const [email, setEmail] = useState("")
