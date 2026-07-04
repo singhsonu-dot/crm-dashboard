@@ -16,6 +16,10 @@ import { deleteCustomer } from "../services/customerService";
 import { toggleCustomerStatus } from "../services/customerService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useRoleStore from "../store/useRoleStore";
+import { FaMoon, FaSun } from "react-icons/fa";
+import useThemeStore from "../store/themeStore";
+import { logout } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function Customers() {
     const addCustomerMutation = useMutation({
@@ -127,7 +131,8 @@ function Customers() {
     const [editingId, setEditingId] = useState(null)
     const [search, setSearch] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
-    const usersPerPage = 5
+    const usersPerPage = 5     
+    const navigate = useNavigate()
 
     const queryClient = useQueryClient()
 
@@ -137,6 +142,12 @@ function Customers() {
 
     const addNotification = useNotificationStore((state) => state.addNotification)
     const role = useRoleStore((state) => state.role)
+    const isDark = useThemeStore((state) => state.isDark) 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+    const handleLogout = () => {
+        logout() 
+        navigate("/")
+    }
 
     const deleteCustomerMutation = useMutation(({
         mutationFn: deleteCustomer,
@@ -183,10 +194,11 @@ function Customers() {
                         <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                             <Sidebar/>
 
-                            <div className="mt-auto border-t border-slate-700 pt-4">
-                                <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
-                                  Dark Mode 
+                            <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                                <button onClick={toggleTheme} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-slate-200 dark:bg-slate-700 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
+                                  {isDark ? <FaSun size={18}/> : <FaMoon size={18} />}
                                 </button>
+                                <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-blue-500 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
                             </div>
                         </aside>
             
@@ -196,6 +208,15 @@ function Customers() {
                                     <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
                                 </div>
                                 <Sidebar/>
+
+                                <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                                  <button onClick={toggleTheme} className="flex w-full items-center gap-3 rounded-md bg-slate-200 dark:bg-slate-700 py-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-sm font-medium text-black dark:text-white">
+                                     Dark Mode {isDark ? <FaSun size={18}/> : <FaMoon size={18}/>} 
+                                 </button>
+                                 <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md bg-blue-500 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
+                                     Logout
+                                 </button>
+                                </div>
                             </aside>
                         )}
                         </> 

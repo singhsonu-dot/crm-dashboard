@@ -15,7 +15,7 @@ function Navbar({ title, toggleSidebar }) {
     return (
         <header className="mb-5 flex w-full items-center justify-between gap-2 rounded-1g bg-gray-100 dark:bg-slate-800 px-3 py-4">
             <div className="flex items-center gap-3">
-                <button onClick={toggleSidebar} className="md:hidden text-white">
+                <button onClick={toggleSidebar} className="md:hidden text-black dark:text-white">
                     <FaBars size={20}/>
                 </button>
             </div> 
