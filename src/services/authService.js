@@ -62,3 +62,16 @@ export const signInWithGoogle = async () => {
 
     return data; 
 }
+
+export const signInWithGithub = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+            redirectTo: "https://crm-dashboard-beta-jade.vercel.app/dashboard"
+        },
+    })
+
+    if (error) throw error
+
+    return data;
+}

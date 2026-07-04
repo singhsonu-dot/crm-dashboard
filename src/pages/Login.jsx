@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login, signInWithGoogle } from "../services/authService";
+import { login, signInWithGithub, signInWithGoogle } from "../services/authService";
 import toast from "react-hot-toast";
 import supabase from "../lib/supabase";
-import { FcGoogle } from "react-icons/fc";
+import { FcGoogle, FaGithub } from "react-icons/fc";
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -44,6 +44,14 @@ function Login() {
         }
     }; 
 
+    const handleGithubLogin = async () => {
+        try {
+            await signInWithGithub()
+        } catch (error) {
+            toast.error(error.message)
+        }
+    };
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4">
             <div className="w-full max-w-md rounded-x1 bg-slate-800 p-6 shadow-1g">
@@ -72,11 +80,11 @@ function Login() {
                         <FcGoogle size={20}/>
                         <span>Continue with Google</span>
                     </button>
-
-                    <button type="button" onClick={() => toast("Github Login coming in V3")} className="w-full rounded-1g border border-slate-600 py-3 font-medium text-white transition hover:bg-slate-700">
-                        Continue with Github
-                    </button>
                     
+                     <button type="button" onClick={handleGithubLogin} className="mb-3 flex w-full items-center justify-center gap-3 rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
+                        <FaGithub size={20}/>
+                        <span>Continue with Google</span>
+                    </button>
                 </form>
             </div>
         </div>

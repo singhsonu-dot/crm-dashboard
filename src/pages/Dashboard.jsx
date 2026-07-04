@@ -10,6 +10,7 @@ import useThemeStore from "../store/themeStore";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { logout } from "../services/authService";
 import useUsers from "../hooks/useUsers"
+import toast from "react-hot-toast";
 
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -27,7 +28,7 @@ function Dashboard() {
             await logout()
             navigate("/", { replace: true })
         } catch (error) {
-            console.error(error)
+            toast.error(error)
         }
     }
 
