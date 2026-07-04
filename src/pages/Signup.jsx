@@ -27,8 +27,8 @@ function Signup() {
                 <h1 className="mb-4 text-white text-center text-3x1 font-bold">Create Account</h1>
 
                 <form onSubmit={handleSignup} className="space-y-4">
-                    <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} className="w-full text-white rounded-1g border border-slate-600 px-4 py-3 outline-none focus: border-blue-500"/>
-                    <input type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} className="w-full text-white rounded-1g border border-slate-600 px-4 py-3 outline-none focus: border-blue-500"/>
+                    <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} className="w-full text-white rounded-1g border px-4 py-3 outline-none focus: border-blue-500"/>
+                    <input type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} className="w-full text-white rounded-1g border px-4 py-3 outline-none focus: border-blue-500"/>
                     <button type="submit" className="w-full rounded-1g bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600">Create Account</button>
 
                     <div className="text-center mt-4">
