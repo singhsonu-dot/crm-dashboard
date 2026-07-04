@@ -6,12 +6,17 @@ import toast from "react-hot-toast"
 import { useState } from "react"
 import useStore from "../store/useStore"
 import useRoleStore from "../store/useRoleStore"
+import { FaMoon, FaSun } from "react-icons/fa"
+import useThemeStore from "../store/themeStore"
+import { useNavigate } from "react-router-dom"
+import { logout } from "../services/authService"
 
 function Settings() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const[emailNotifications, setEmailNotifications] = useState(true)
     const [marketingEmails, setMarketingEmails] = useState(false)
     const [productUpdates, setProductUpdates] = useState(true)
+    const navigate = useNavigate()
 
     const {
         register: profileRegister,
@@ -29,6 +34,12 @@ function Settings() {
     const addNotification = useNotificationStore((state) => state.addNotification)
     const updateProfile = useStore((state) => state.updateProfile)
     const role = useRoleStore((state) => state.role)
+    const isDark = useThemeStore((state) => state.isDark) 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+    const handleLogout = () => {
+        logout() 
+        navigate("/")
+    }
 
     const newPassword = watch("newPassword")
 
@@ -80,10 +91,11 @@ function Settings() {
             <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                 <Sidebar/>
 
-                <div className="mt-auto border-t border-slate-700 pt-4">
-                    <button className="w-full rounded-md bg-gray-100 dark:bg-slate-700 py-2  text-black dark:text-white hover:bg-slate-600">
-                        Dark Mode 
+                <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                    <button onClick={toggleTheme} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-slate-200 dark:bg-slate-700 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
+                      {isDark ? <FaSun size={18}/> : <FaMoon size={18} />}
                     </button>
+                    <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-blue-500 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
                 </div>
             </aside>
 
@@ -93,6 +105,15 @@ function Settings() {
                         <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
                     </div>
                     <Sidebar/>
+
+                    <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
+                        <button onClick={toggleTheme} className="flex w-full items-center gap-3 rounded-md bg-slate-200 dark:bg-slate-700 py-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-sm font-medium text-black dark:text-white">
+                          Dadrk Mode  {isDark ? <FaSun size={18}/> : <FaMoon size={18}/>} 
+                        </button>
+                        <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md bg-blue-500 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
+                            Logout
+                        </button>
+                    </div>
                 </aside>
             )}
             </>
