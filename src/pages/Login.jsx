@@ -61,7 +61,7 @@ function Login() {
                     </div>
 
                     <button type="button" onClick={handleGoogleLogin} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
-                        <FcGoogle size={20}/>
+                        <FcGoogle size={20} className="absolute left-4"/>
                         <span>Continue with Google</span>
                     </button>
 

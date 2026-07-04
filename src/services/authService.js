@@ -40,7 +40,7 @@ export const signUp = async (email, password) => {
 
 export const resetPassword = async (email) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "http://localhost:5173/reset-password",
+        redirectTo: "https://crm-dashboard-beta-jade.vercel.app/forgot-password",
     });
 
     if (error) throw error;
