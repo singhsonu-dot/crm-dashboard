@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, signInWithGoogle } from "../services/authService";
 import toast from "react-hot-toast";
@@ -10,6 +10,18 @@ function Login() {
     const [password, setPassword] = useState("")
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const checkSession = async () => {
+           const {
+             data: { session },
+           } = await supabase.auth.getSession()
+
+           if (session) {
+              navigate("/dashboard")
+           }
+        }
+    }, [navigate])
 
     const handleLogin = async (e) => {
         e.preventDefault() 
@@ -24,15 +36,10 @@ function Login() {
     }
 
     const handleGoogleLogin = async () => {
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-                redirectTo: window.location.origin,
-            },
-        });
-
-        if (error) {
-            toast.error(error.message);
+        try {
+            await signInWithGoogle()
+        } catch (error) {
+            toast.error(error.message)
         }
     }; 
 
@@ -60,8 +67,8 @@ function Login() {
                         <div className="h-px flex-1 bg-slate-600"></div>
                     </div>
 
-                    <button type="button" onClick={handleGoogleLogin} className="mb-3 w-full rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
-                        <FcGoogle size={20} className="absolute left-4"/>
+                    <button type="button" onClick={handleGoogleLogin} className="mb-3 flex w-full items-center justify-center gap-3 rounded-1g border border-slate-600 py-3 font-medium text-white trnasition hover:bg-slate-700">
+                        <FcGoogle size={20}/>
                         <span>Continue with Google</span>
                     </button>
 
