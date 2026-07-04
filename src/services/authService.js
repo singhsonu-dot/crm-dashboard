@@ -22,6 +22,8 @@ export const isAuthenticated = async () => {
         data: { session },
     } = await supabase.auth.getSession();
 
+    console.log("SESSION:", session)
+
     return !!session; 
 }; 
 

@@ -9,6 +9,7 @@ function ProtectedRoute({ children }) {
     const checkAuth = async () => {
       const auth = await 
       isAuthenticated();
+      console.log("ProtectedRoute auth:", auth)
       setIsAuth(auth);
     };
 
