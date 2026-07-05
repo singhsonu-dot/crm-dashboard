@@ -22,9 +22,14 @@ function ResetPassword () {
 
         alert("Calling updateUser...")
 
-        const { error } = await Supabase.auth.updateUser({password})
+        const { error } = await Supabase.auth.updateUser({
+            password, 
+        })
 
-        alert(JSON.stringify({ data, error }))
+        alert(JSON.stringify({
+            error: error?.message,
+            user: data?.user?.email, 
+        }))
 
         if (error) {
             toast.error(error.message)
