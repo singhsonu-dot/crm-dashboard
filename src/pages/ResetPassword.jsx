@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase"
@@ -7,6 +7,13 @@ function ResetPassword () {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const navigate = useNavigate()
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data }) => {
+            console.log("Recovery session:", data.session)
+            alert(data.session ? "Session Foound" : "Session Missing")
+        }) 
+    }, [])
 
     const handleResetPassword = async () => {
         alert("button clicked")
