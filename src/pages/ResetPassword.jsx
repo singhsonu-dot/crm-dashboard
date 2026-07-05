@@ -36,7 +36,7 @@ function ResetPassword () {
                 </h2>
 
                 <input type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} className="mb-4 w-full rounded border border-slate-600 bg-slate-700 p-3 text-white"/>
-                <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setCofirmPassword(e.target.value)} className="mb-4 w-full rounded border border-slate-600 bg-slate-700 p-3 text-white"/>
+                <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mb-4 w-full rounded border border-slate-600 bg-slate-700 p-3 text-white"/>
                 <button onClick={handleResetPassword} className="w-full rounded bg-blue-500 text-white hover:bg-blue-600">
                     Update Password
                 </button>
