@@ -9,15 +9,22 @@ function ResetPassword () {
     const navigate = useNavigate()
 
     const handleResetPassword = async () => {
+        alert("button clicked")
         if (!password || !confirmPassword) {
+            alert("Empty field")
             return toast.error("Fill all fields")
         }
 
         if (password !== confirmPassword) {
+            alert("Password do'nt match")
             return toast.error("Password do not match")
         }
 
+        alert("Calling updateUser...")
+
         const { error } = await Supabase.auth.updateUser({password})
+
+        alert(JSON.stringify({ data, error }))
 
         if (error) {
             toast.error(error.message)
