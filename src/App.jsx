@@ -9,6 +9,7 @@ const Subscription = lazy(() => import("./pages/Subscription"))
 const Settings = lazy(() => import("./pages/Settings"))
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"))
 const Signup = lazy(() => import( "./pages/Signup"))
+const ResetPassword = lazy(() => import("./pages/ResetPassword"))
 import useThemeStore from "./store/themeStore";
 import { lazy, Suspense, useEffect } from "react";
 import Loader from "./components/ui/Loader";
@@ -23,8 +24,12 @@ const router = createBrowserRouter([
     element: <ForgotPassword/>
   },
   {
-    path: "/Signup",
+    path: "/signup",
     element: <Signup/>
+  }, 
+  {
+    path: "/reset-password", 
+    element: <ResetPassword/>
   }, 
   {
     path: "/dashboard",
