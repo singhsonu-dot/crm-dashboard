@@ -13,45 +13,45 @@ import { useNavigate } from "react-router-dom";
   const chartData = [
         { month: "Jan", customers: 4 },
         { month: "Feb", customers: 6 },
-        { month: "March", customers: 8 },
-        { month: "April", customers: 10 },
+        { month: "Mar", customers: 8 },
+        { month: "Apr", customers: 10 },
         { month: "May", customers: 12 },
         { month: "June", customers: 15 },
     ];
 
     const revenueData = [
         {
-            month: "Jan",
+            week: "Mon",
             subscriptions: 700,
             services: 300,
             support: 200,
         }, 
         {
-            month: "Feb",
+            week: "Tue",
             subscriptions: 900,
             services: 500,
             support: 400,
         }, 
         {
-            month: "Mar",
+            week: "Wed",
             subscriptions: 1200,
             services: 700,
             support: 500,
         }, 
         {
-            month: "Apr",
+            week: "Thr",
             subscriptions: 1600,
             services: 900,
             support: 700,
         }, 
         {
-            month: "May",
+            week: "Fri",
             subscriptions: 2000,
             services: 1200,
             support: 900,
         }, 
         {
-            month: "Jun",
+            week: "Sat",
             subscriptions: 2600,
             services: 1700,
             support: 900,
@@ -65,39 +65,39 @@ import { useNavigate } from "react-router-dom";
             revenue: "$900",
             growth: "+4%",
             customerChart: [
-                { month: "Mon", customers: 1 },
-                { month: "Tue", customers: 2 },
-                { month: "Wed", customers: 3 },
-                { month: "Thu", customers: 4 },
-                { month: "Fri", customers: 5 },
+                { month: "Jan", customers: 1 },
+                { month: "Feb", customers: 2 },
+                { month: "Mar", customers: 3 },
+                { month: "Apr", customers: 4 },
+                { month: "May", customers: 5 },
             ],
             revenueChart: [
                 {
-                    month: "Mon",
+                    week: "Mon",
                     subscriptions: 80,
                     services: 40,
                     support: 30,
                 },
                 {
-                    month: "Tue",
+                    week: "Tue",
                     subscriptions: 90,
                     services: 50,
                     support: 40,
                 },
                 {
-                    month: "Wed",
+                    week: "Wed",
                     subscriptions: 120,
                     services: 60,
                     support: 40,
                 },
                  {
-                    month: "Thu",
+                    week: "Thu",
                     subscriptions: 100,
                     services: 40,
                     support: 20,
                 },
                  {
-                    month: "Fri",
+                    week: "Fri",
                     subscriptions: 130,
                     services: 50,
                     support: 30,
@@ -126,32 +126,32 @@ import { useNavigate } from "react-router-dom";
                 { month: "Fri", customers: 30 },
             ],
             revenueChart: [
-                   {
-                    month: "Mon",
+                {
+                    week: "Mon",
                     subscriptions: 120,
                     services: 80,
                     support: 50,
                 },
                 {
-                    month: "Tue",
+                    week: "Tue",
                     subscriptions: 150,
                     services: 90,
                     support: 60,
                 },
                 {
-                    month: "Wed",
+                    week: "Wed",
                     subscriptions: 170,
                     services: 100,
                     support: 70,
                 },
                  {
-                    month: "Thu",
+                    week: "Thu",
                     subscriptions: 220,
                     services: 120,
                     support: 90,
                 },
                  {
-                    month: "Fri",
+                    week: "Fri",
                     subscriptions: 280,
                     services: 150,
                     support: 120,
@@ -333,7 +333,7 @@ function Analytics() {
                     <div className="w-full h-[320px]">
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={currentData.revenueChart}>
-                                <XAxis dataKey="month" stroke="#94a3b8"/>
+                                <XAxis dataKey="week" stroke="#94a3b8"/>
 
                                 <YAxis stroke="#94a3b8"/>
 
