@@ -1,44 +1,43 @@
-# Admin Dashboard V1
+# CRM Dashboard
 
 ## Live Demo
 
-https://admin-dashboard-v1-sandy.vercel.app/ 
+https://crm-dashboard-beta-jade.vercel.app/
 
-A functional frontend React-based admin dashboard that consumes
-user data from the JSONplaceholder API. 
+A functional frontend React-based crm dashboard that consumes
+user data from the REST API. 
 
 ## Project purpose:
 
-To practice production-style frontend development concepts including
-Routing, Protected Pages, Custom Hooks, API handling, responsive layouts,
-and user management
+A production-style CRM dashboard built with React and Supabase to demonstrate
+modern frontend architecture, authentication, role-based access, analytics,
+subscription management, and real API integration. 
 
 ## key features:
 
-- Navbar with profile, notification and logout sections. Responsive
-  spacing and a functional logout flow
-
-- Active sidebar links with active pages highlight, hover effect and
-  NavLinks
-
-- Responsive design (mobile & desktop) with vanilla CSS
-
-- Lighthouse optimized (Performance, Accessibilty, Best Practices & SEO)
-
-- Loading and Error state handling using custom hooks 
-
-- Error UI polish with centered message, retry button
-
-- Protected Dashboard Access
-
-- User management Table with delete actions and Toast Notifications 
+- Secure authentication with Supabase OAuth
+- Protected routes and role-based access control
+- Customer management (CRUD)
+- Analytics dashboard
+- Subscription management
+- Real-time data using Supabase PostgreSQL
+- Responsive design with Tailwind CSS
+- Loading, empty and error states
+- Reusable React components
+- Clean and scalable folder structure
+- Lighthouse optimized (Performance, Accessibility, Best Practices & SEO)
 
 ## Tech stack:
 
 - React
-
 - Vite
-
+- Tailwind CSS
 - React Router
+- Supabase
+- PostgreSQL
+- REST APIs
+- OAuth
 
-- Vanilla CSS
+##  Author 
+
+**Sonu Kumar Singh**
