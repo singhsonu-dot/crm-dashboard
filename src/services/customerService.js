@@ -17,7 +17,7 @@ export const getCustomers = async () => {
 
 export const addCustomer = async (customer) => {
     const {
-        data: { useer },
+        data: { user },
     } = await supabase.auth.getUser();
 
     console.log("USER OBJECT:", user);
