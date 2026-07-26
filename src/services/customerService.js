@@ -42,6 +42,19 @@ export const deleteCustomer = async (id) => {
     return true;
 }; 
 
-export const toggleCustomerStatus = async (id, status) => {
-    return await updateCustomer(id, { status });
+export const toggleCustomerStatus = async (customer, newStatus) => {
+    const res = await fetch(`${API_BASE_URL}/customers/${customer.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+            website: customer.website,
+            status: newStatus
+        }),
+    });
+    if (!res.ok) throw new Error("Failed to update status");
+    const data = await res.json();
+    return data.data;
 }; 
