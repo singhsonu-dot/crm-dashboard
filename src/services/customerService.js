@@ -1,3 +1,4 @@
+import supabase from "../lib/supabase"; 
 const API_BASE_URL ="https://crm-backend-wek4.onrender.com/api";
 
 export const getCustomers = async () => {
@@ -8,10 +9,14 @@ export const getCustomers = async () => {
 };
 
 export const addCustomer = async (customer) => {
+    const { data: { user } } = await supabase.auth.getUser();
     const res = await fetch(`${API_BASE_URL}/customers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customer),
+        body: JSON.stringify({
+            ...customer,
+            user_id: user?.id || null 
+        }),
     });
     if (!res.ok) throw new Error("Failed to add customer");
     const data = await res.json();
