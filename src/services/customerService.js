@@ -1,77 +1,42 @@
-import supabase from "../lib/supabase"
+const API_BASE_URL ="https://crm-backend-wek4.onrender.com/api";
 
 export const getCustomers = async () => {
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
-
-    const { data, error } = await 
-    supabase 
-    .from("customers")
-    .select("*") 
-    .eq("user_id", user.id) 
-
-    if (error) throw error
-    return data; 
-} 
+    const res = await fetch(`${API_BASE_URL}/customers`);
+    if (!res.ok) throw new Error("Failed to fetch customers");
+    const data = await res.json();
+    return data.data;
+};
 
 export const addCustomer = async (customer) => {
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    console.log("USER OBJECT:", user);
-    console.log("USER ID:", user?.id);
-    console.log("INSERT DATA:", {
-        ...customer,
-        user_id: user?.id, 
-    }); 
-   
-    const { data, error } = await 
-    supabase 
-    .from("customers")
-    .insert([
-        {
-            ...customer,
-            user_id: user.id,
-        }, 
-    ])
-    .select(); 
-
-    if (error) throw error 
-    return data 
-}
+    const res = await fetch(`${API_BASE_URL}/customers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customer),
+    });
+    if (!res.ok) throw new Error("Failed to add customer");
+    const data = await res.json();
+    return data.data;
+};
 
 export const updateCustomer = async (id, updates) => {
-    const { data, error } = await 
-    supabase 
-    .from("customers")
-    .update(updates) 
-    .eq("id", id)
-    .select()
-
-    if (error) throw error 
-
-    return data 
-}
+    const res = await fetch(`${API_BASE_URL}/customers/${id}`, {
+        method: "PUT",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(updates),
+    });
+    if (!res.ok) throw new Error("Failed to update customer");
+    const data = await res.json();
+    return data.data;
+};
 
 export const deleteCustomer = async (id) => {
-    const { error } = await supabase 
-    .from("customers")
-    .delete()
-    .eq("id", id)
-
-    if (error) throw error 
-}
+    const res = await fetch(`${API_BASE_URL}/customers/${id}`, {
+        method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete customer");
+    return true;
+}; 
 
 export const toggleCustomerStatus = async (id, status) => {
-    const { data, error } = await supabase
-    .from("customers")
-    .update({ status }) 
-    .eq("id", id) 
-    .select() 
-
-    if (error) throw error 
-
-    return data 
-}
+    return await updateCustomer(id, { status });
+}; 
