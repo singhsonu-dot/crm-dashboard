@@ -60,7 +60,7 @@ function Analytics() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `customer-growth-${dataRange.replace(/\s+/g, '-').toLowerCase()}.csv`;
+        link.download = `customer-growth-${dateRange.replace(/\s+/g, '-').toLowerCase()}.csv`;
         link.click();
         URL.revokeObjectURL(url);
     };
