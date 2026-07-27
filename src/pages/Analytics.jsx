@@ -45,6 +45,26 @@ function Analytics() {
         fetchAnalytics();
     }, [dateRange]);
 
+    const handleExportCustomerCSV = () => {
+        if (!analytics?.customerChart)
+            return;
+
+        const headers = ["Label / Month", "Total Customers"]
+        const rows = analytics.customerChart.map((item) => [
+            item.month,
+            item.customers,
+        ]);
+
+        const csvContent = [headers, ...rows].map((row) => row.join(",")).join("\n")
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `customer-growth-${dataRange.replace(/\s+/g, '-').toLowerCase()}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
     const handleExportCSV = () => {
         if (!analytics?.revenueChart) return;
 
@@ -134,7 +154,13 @@ function Analytics() {
                         </section>
 
                         <section className="rounded-lg bg-gray-100 dark:bg-slate-800 p-5">
-                            <h2 className="mb-4 text-lg font-semibold">Customer Growth</h2>
+                            <div className="mb-4 flex items-center justify-between">
+                                <h2 className="text-1g font-semibold text-slate-900 dark:text-white">Customer Growth</h2>
+                                <button onClick={handleExportCustomerCSV} className="rounded-1g bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
+                                    Export CSV
+                                </button>
+                            </div>
+
                             <div className="w-full h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%"> 
                                     <LineChart data={analytics?.customerChart || []}>
