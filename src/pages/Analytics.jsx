@@ -33,7 +33,7 @@ function Analytics() {
 
             setLoading(true)
             try {
-                const response = await fetchAnalyticsData();
+                const response = await fetchAnalyticsData(dateRange);
                 if (response.success) {
                     setAnalytics(response.data)
                 }
