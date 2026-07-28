@@ -56,24 +56,25 @@ function Navbar({ title, toggleSidebar }) {
                     )}
                 </div>
 
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 font-bold text-black dark:text-white">
-                    {profile.name.charAt(0).toUpperCase()}
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-slate-700 font-bold text-black dark:text-white">
+                    {profile?.name?.charAt(0).toUpperCase() || 'U'}
                 </div>
 
                 <div className="hidden 1g:block text-right">
                     <p className="text-sm font-medium text-black dark:text-white">
-                        {profile.name}
+                        {profile?.name || 'User'}
                     </p>
 
-                    <p className="text-xs text-black dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                         {profile.email}
                     </p>
                 </div> 
 
-                <select value={role} onChange={(e) => setRole(e.target.value)} className="hidden md:block rounded-md bg-gray-100 dark:bg-slate-700 px-3 py-2 text-sm text-black dark:text-white">
-                    <option value="admin">Admin</option>
-                    <option value="viewer">Viewer</option>
-                </select>
+                {profile?.role && (
+                    <span className="hidden md:inline-block rounded-md bg-blue-100 dark:bg-slate-700 px-2.5 py-1 text-xs font-semibold uppercase text-blue-700 dark:text-blue-400">
+                        {profile.role}
+                    </span>
+                )}
             </div>
         </header>
     )

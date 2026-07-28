@@ -9,6 +9,7 @@ import StatCard from "../components/ui/StatCard";
 import Loader from "../components/ui/Loader";
 import useThemeStore from "../store/themeStore";
 import { logout } from "../services/authService";
+import { fetchAnalyticsData } from "../services/analyticsService";
 
 const PERFORMANCE_DATA = [
     { id: 1, title: "Revenue Increased", description: "Revenue increased this month.", icon: <FaChartLine className="text-green-500"/> },
@@ -19,8 +20,8 @@ const PERFORMANCE_DATA = [
 
 function Analytics() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [dateRange, setDateRange] = useState("Last 7 Days");
     const [analytics, setAnalytics] = useState(null);
+    const [dateRange, setDateRange] = useState("Last 7 Days");
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
@@ -28,22 +29,23 @@ function Analytics() {
     const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
     useEffect(() => {
-        const fetchAnalytics = async () => {
-            setLoading(true);
+        const loadAnalytics = async () => {
+
+            setLoading(true)
             try {
-                const res = await fetch(`https://crm-backend-wek4.onrender.com/api/analytics?range=${dateRange}`);
-                const data = await res.json();
-                if (data.success) {
-                    setAnalytics(data.data);
+                const response = await fetchAnalyticsData();
+                if (response.success) {
+                    setAnalytics(response.data)
                 }
             } catch (err) {
-                console.error("Failed to load analytics", err);
+                console.error("Failed to load analytics data:", err)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
         };
-        fetchAnalytics();
-    }, [dateRange]);
+
+        loadAnalytics();
+    }, [dateRange])
 
     const handleExportCustomerCSV = () => {
         if (!analytics?.customerChart)
