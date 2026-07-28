@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import supabase from "../lib/supabase";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
