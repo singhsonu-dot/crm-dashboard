@@ -2,7 +2,7 @@ import supabase from "../lib/supabase";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-export const fetchAnalyticsData = async (dataRange = 'Last 7 Days') => {
+export const fetchAnalyticsData = async (dateRange = 'Last 7 Days') => {
     try {
         const { data: { session } } = await supabase.auth.getSession();
         const token = session?.access_token; 
