@@ -1,5 +1,7 @@
 import { supabase } from './supabaseClient';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 export const fetchAnalyticsData = async () => {
     try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -9,7 +11,7 @@ export const fetchAnalyticsData = async () => {
             throw new Error("No access token found");
         }
 
-        const response = await fetch('http://localhost:5000/api/analytics', {
+        const response = await fetch(`${BASE_URL}/api/analytics`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

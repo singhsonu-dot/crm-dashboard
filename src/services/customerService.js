@@ -1,8 +1,28 @@
 import supabase from "../lib/supabase"; 
-const API_BASE_URL ="https://crm-backend-wek4.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://crm-backend-wek4.onrender.com";
+const API_BASE_URL =`${BASE_URL}/api`;
+
+const getAuthHeaders = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
+    if (!token) {
+        throw new Error("No active session found. Please login again");
+    }
+
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+};
 
 export const getCustomers = async () => {
-    const res = await fetch(`${API_BASE_URL}/customers`);
+    const headers = await getAuthHeaders();
+    const res = await fetch(`${API_BASE_URL}/customers`, {
+        method: "GET",
+        headers, 
+    });
+
     if (!res.ok) throw new Error("Failed to fetch customers");
     const data = await res.json();
     return data.data;
@@ -10,9 +30,10 @@ export const getCustomers = async () => {
 
 export const addCustomer = async (customer) => {
     const { data: { user } } = await supabase.auth.getUser();
+    const headers = await getAuthHeaders();
     const res = await fetch(`${API_BASE_URL}/customers`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
             ...customer,
             user_id: user?.id || null 
@@ -23,11 +44,13 @@ export const addCustomer = async (customer) => {
     return data.data;
 };
 
-export const updateCustomer = async (id, updates) => {
+export const updateCustomer = async (id, updatedData) => {
+    const headers = await getAuthHeaders();
+
     const res = await fetch(`${API_BASE_URL}/customers/${id}`, {
         method: "PUT",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(updates),
+        headers,
+        body: JSON.stringify(updatedData),
     });
     if (!res.ok) throw new Error("Failed to update customer");
     const data = await res.json();
@@ -35,17 +58,23 @@ export const updateCustomer = async (id, updates) => {
 };
 
 export const deleteCustomer = async (id) => {
+    const headers = await getAuthHeaders();
+
     const res = await fetch(`${API_BASE_URL}/customers/${id}`, {
         method: "DELETE",
+        headers,
     });
     if (!res.ok) throw new Error("Failed to delete customer");
-    return true;
+    const data = await res.json();
+    return data.data;
 }; 
 
 export const toggleCustomerStatus = async (id, status) => {
+    const headers = await getAuthHeaders();
+
     const res = await fetch(`${API_BASE_URL}/customers/${id}/status`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ status }),
     });
     if (!res.ok) throw new Error("Failed to update status");
