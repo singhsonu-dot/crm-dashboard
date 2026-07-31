@@ -178,12 +178,13 @@ function Customers() {
         deleteCustomerMutation.mutate(id)
     }
 
-    const filteredUsers = users.filter(
-        (user) =>
-        (user.name ?? "")
-          .toLowerCase()
-          .includes((debouncedSearch ?? "").toLowerCase()) || [] 
-    )
+    // Filter logic: Checks both Name and Email properly
+    const filteredUsers = (users || []).filter((user) => {
+        const query = (debouncedSearch || "").toLowerCase();
+        const nameMatch = (user.name || "").toLowerCase().includes(query);
+        const emailMatch = (user.email || "").toLowerCase().includes(query);
+        return nameMatch || emailMatch;
+    });
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage) || 1 
     const startIndex = (currentPage - 1) * usersPerPage
@@ -248,7 +249,7 @@ function Customers() {
                         <SearchBar value={search} onChange={(e) => {
                             setSearch(e.target.value)
                             setCurrentPage(1)
-                        }} placehholder="Search Customers"/>
+                        }} placeholder="Search Customers"/> 
                     </div>
 
                     {role === "admin" && (
