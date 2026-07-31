@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom"
 import { logout } from "../services/authService"
 import supabase from "../lib/supabase"
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+
 function Subscription() {
     const plans = [
         {
@@ -68,13 +70,12 @@ function Subscription() {
   useEffect(() => {
    const fetchUserPlan = async () => {
     try {
-      // Supabase se token lo taaki consistency rahe
       const { data: { session } } = await supabase.auth.getSession();
       const authToken = session?.access_token;
 
       if (!authToken) return;
 
-      const response = await fetch('http://localhost:5000/api/subscription/current-plan', {
+      const response = await fetch(`${API_BASE_URL}/api/subscription/current-plan`, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
       const resultData = await response.json();
@@ -104,7 +105,7 @@ function Subscription() {
                 toast.error("Session expired! Please login again.");
                 return 
             }
-            const res = await fetch('http://localhost:5000/api/subscription/create-order', {
+            const res = await fetch(`${API_BASE_URL}/api/subscription/create-order`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,7 +128,7 @@ function Subscription() {
                 description: `${planName.toUpperCase()} Subscription Upgrade`,
                 order_id: data.order.id,
                 handler: async function (response) {
-                    const verifyRes = await fetch('http://localhost:5000/api/subscription/verify-payment', {
+                    const verifyRes = await fetch(`${API_BASE_URL}/api/subscription/verify-payment`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

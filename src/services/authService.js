@@ -50,7 +50,7 @@ export const resetPassword = async (email) => {
 }; 
 
 export const signInWithGoogle = async () => {
-    const redirectUrl = `${window.location.origin}/dashboard`
+    const redirectUrl = "https://crm-dashboard-beta-jade.vercel.app/dashboard"
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
