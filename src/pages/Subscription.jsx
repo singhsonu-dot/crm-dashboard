@@ -2,11 +2,12 @@ import toast from "react-hot-toast"
 import useNotificationStore from "../store/notificationStore"
 import Sidebar from "../components/Sidebar"
 import Navbar from "../components/Navbar"
-import { useState } from "react"
-import { FaMoon, FaSun } from "react-icons/fa"
+import { useEffect, useState } from "react"
+import { FaCheck, FaMoon, FaSun } from "react-icons/fa"
 import useThemeStore from "../store/themeStore"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../services/authService"
+import supabase from "../lib/supabase"
 
 function Subscription() {
     const plans = [
@@ -24,7 +25,7 @@ function Subscription() {
         {
             id: 2,
             name: "Pro",
-            price: "$29/mo",
+            price: "$29/mon",
             features: [
                 "Advance Analytics", 
                 "CSV Export", 
@@ -49,6 +50,7 @@ function Subscription() {
     ]
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [currentPlan, setCurrentPlan] = useState('free')
     const navigate = useNavigate()
 
     const addNotification = useNotificationStore((state) => state.addNotification)
@@ -63,10 +65,110 @@ function Subscription() {
         }
     }
 
-    const handlePlanSelect = (planName) => {
-        addNotification(`${planName} plan selected`)
-        toast.success(`${planName} plan selected`)
-    }
+  useEffect(() => {
+   const fetchUserPlan = async () => {
+    try {
+      // Supabase se token lo taaki consistency rahe
+      const { data: { session } } = await supabase.auth.getSession();
+      const authToken = session?.access_token;
+
+      if (!authToken) return;
+
+      const response = await fetch('http://localhost:5000/api/subscription/current-plan', {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+      const resultData = await response.json();
+      
+      if (resultData.plan) {
+        setCurrentPlan(resultData.plan);
+      }
+    } catch (err) {
+      console.error("Failed to fetch plan:", err);
+    } 
+  };
+
+  fetchUserPlan();
+}, []);
+
+    const handlePlanSelect = async (planName) => {
+        if (planName === 'Free') {
+            toast.success("You can already be on the Free plan or switch directly!")
+            return;
+        }
+
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
+            if (!token) {
+                toast.error("Session expired! Please login again.");
+                return 
+            }
+            const res = await fetch('http://localhost:5000/api/subscription/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ plan: planName.toLowerCase() })
+            });
+            const data = await res.json(); 
+
+            if (!data.success) {
+                toast("Order creation failed: " + data.error);
+                return;
+            }
+
+            const options = {
+                key: data.key,
+                amount: data.order.amount,
+                currency: data.order.currency,
+                name: "Enterprise CRM platform",
+                description: `${planName.toUpperCase()} Subscription Upgrade`,
+                order_id: data.order.id,
+                handler: async function (response) {
+                    const verifyRes = await fetch('http://localhost:5000/api/subscription/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            plan: planName.toLowerCase()
+                        })
+                    });
+
+                    const verifyData = await verifyRes.json();
+
+                    if (verifyData.success) {
+                        toast.success(`Payment Successful! Switched to ${planName} Plan.`);
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1500)
+                    } else {
+                        toast.error("Payment Verification Failed!")
+                    }
+                },
+                prefill: {
+                    name: "Sonu Kumar",
+                    email: "singhsonu89860@gmail.com",
+                },
+                theme: {
+                    color: "#2563eb"
+                }
+
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } catch (err) {
+            console.error("Payment Error:", err);
+            toast.error("Something went wrong with the payment!")
+        }
+    }; 
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen text-black dark:text-white md:overflow-hidden">
@@ -120,21 +222,33 @@ function Subscription() {
                 <section className="grid gap-6 md:grid-cols-3">
                     {plans.map((plan) => (
                 <div key={plan.id} className="rounded-1g bg-gray-100 dark:bg-slate-800 p-6 shadow-1g transition hover:scale-105">
-                    <h2 className="text-2x1 font-bold text-black dark:text-white">{plan.name}</h2>
-                    <p className="mt-2 text-3x1 font-bold text-black dark:text-blue-400">{plan.price}</p>
-                    <ul className="mt-6 space-y-3">
-                        {plan.features.map((feature) => (
-                            <li key={feature} className="text-black dark:text-white">
-                                {feature}
-                            </li>
-                        ))}
-                    </ul>
+                    <div>
+                        <h2 className="text-2x1 font-bold text-black dark:text-white">
+                            {plan.name}
+                        </h2>
 
-                    <button onClick={() => handlePlanSelect(plan.name)} className="mt-8 w-full rounded-1g bg-blue-500 py-3 font-medium text-white transition hover:bg-blue-600">Choose plan</button>
+                        <p className="mt-2 text-3x1 font-bold text-black dark:text-blue-400">
+                            {plan.price}
+                        </p>
+
+                        <ul className="mt-6 space-y-3">
+                            {plan.features.map((feature, index) => (
+                                <li key={index} className="text-black dark:text-white flex items-center gap-2">
+                                    <FaCheck className="text-green-500 text-sm"/>
+                                    <span>{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <button onClick={() => handlePlanSelect(plan.name)}
+                     disabled={currentPlan.toLowerCase() === plan.name.toLowerCase()}
+                     className={`mt-8 w-full rounded-1g ${currentPlan?.toLowerCase() === plan.name.toLowerCase() ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}>
+                        {currentPlan.toLowerCase() === plan.name.toLowerCase() ? 'Current Plan' : 'Choose Plan'}
+                     </button>
                 </div>
             ))}
-
-                </section>
+            </section>
             </main>
         </div>
     )

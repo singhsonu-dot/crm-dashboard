@@ -1,3 +1,4 @@
+import { redirect } from "react-router-dom";
 import supabase from "../lib/supabase"
 
 export const login = async (email, password) => {
@@ -49,15 +50,15 @@ export const resetPassword = async (email) => {
 }; 
 
 export const signInWithGoogle = async () => {
+    const redirectUrl = `${window.location.origin}/dashboard`
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-            redirectTo: "https://crm-dashboard-beta-jade.vercel.app/dashboard"
+            redirectTo: redirectUrl, 
         },
     });
 
     if (error) throw error;
-
     return data; 
 }
 
@@ -70,6 +71,5 @@ export const signInWithGithub = async () => {
     })
 
     if (error) throw error
-
     return data;
 }
