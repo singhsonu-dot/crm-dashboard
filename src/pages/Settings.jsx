@@ -13,7 +13,7 @@ import { logout } from "../services/authService"
 
 function Settings() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const[emailNotifications, setEmailNotifications] = useState(true)
+    const [emailNotifications, setEmailNotifications] = useState(true)
     const [marketingEmails, setMarketingEmails] = useState(false)
     const [productUpdates, setProductUpdates] = useState(true)
     const navigate = useNavigate()

@@ -130,7 +130,6 @@ function Customers() {
     }
 
     const [customers, setCustomers] = useState([])
-    // const [searchTerm, setSearchTerm] = useState('')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [name, setName] = useState("")
@@ -190,9 +189,8 @@ function Customers() {
     )
 
     const handleExportCSV = () => {
-        if (filteredCustomers.length === 0) {
-            toast.error("No data available to export!")
-            return
+        if (!filteredCustomers || filteredCustomers.length === 0) {
+            return;
         }
 
         const dataToExport = filteredCustomers.map(cust => ({
@@ -200,13 +198,13 @@ function Customers() {
             Name: cust.name || "",
             Email: cust.email || "",
             Phone: cust.phone || 'N/A',
-            website: cust.website || "N/A",
+            Website: cust.website || "N/A",
             Status: cust.status || "inactive",
-            'Joined Date': cust.created_at || "N/A"
+            'Joined Date': (cust.created_at || cust.joinedDate) ? new Date(cust.created_at || cust.joinedDate).toLocaleDateString('en-GB') : "N/A"
         }))
 
         exportToCSV(dataToExport, `Customers_Export_${new Date().toISOString().slice(0, 10)}.csv`)
-        toast.success("CSV Downloaded!")
+        toast.success("CSV Dowloaded!")
     }
 
     const totalPages = Math.ceil(filteredCustomers.length / usersPerPage) || 1 

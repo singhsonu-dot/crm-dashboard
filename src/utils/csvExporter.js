@@ -2,7 +2,6 @@ import toast from "react-hot-toast"
 
 export const exportToCSV = (data, filename = "export.csv") => {
     if (!data || !data.length) return;
-    toast.error("No data available to export!")
 
     // 1. Extract Headers
     const headers = Object.keys(data[0]);
