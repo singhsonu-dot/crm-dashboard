@@ -20,6 +20,8 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import useThemeStore from "../store/themeStore";
 import { logout } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { exportToCSV } from "../utils/csvExporter";
+import { FiDownload } from "react-icons/fi";
 
 function Customers() {
     const resetForm = () => {
@@ -127,6 +129,8 @@ function Customers() {
         })
     }
 
+    const [customers, setCustomers] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [name, setName] = useState("")
@@ -179,16 +183,29 @@ function Customers() {
     }
 
     // Filter logic: Checks both Name and Email properly
-    const filteredUsers = (users || []).filter((user) => {
-        const query = (debouncedSearch || "").toLowerCase();
-        const nameMatch = (user.name || "").toLowerCase().includes(query);
-        const emailMatch = (user.email || "").toLowerCase().includes(query);
-        return nameMatch || emailMatch;
-    });
+    const filteredCustomers = customers.filter(customer => 
+        customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage) || 1 
+    const handleExportCSV = () => {
+        const dataToExport = filteredCustomers.map(cust => ({
+            ID: cust.id,
+            Name: cust.name || "",
+            Email: cust.email || "",
+            Phone: cust.phone || 'N/A',
+            website: cust.website || "N/A",
+            Status: cust.status || "inactive",
+            'Joined Date': cust.created_at
+        }))
+
+        exportToCSV(dataToExport, `Customers_Export_${new Date().toISOString().slice(0, 10)}.csv`)
+        toast.success("CSV Downloaded!")
+    }
+
+    const totalPages = Math.ceil(filteredCustomers.length / usersPerPage) || 1 
     const startIndex = (currentPage - 1) * usersPerPage
-    const paginatedUsers = filteredUsers.slice(
+    const paginatedCustomers = filteredCustomers.slice(
         startIndex, 
         startIndex + usersPerPage
     )
@@ -252,6 +269,13 @@ function Customers() {
                         }} placeholder="Search Customers"/> 
                     </div>
 
+                    <div className="flex items-center gap-3">
+                        <button onClick={handleExportCSV} className="flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 shadow-sm">
+                            <FiDownload className="text-base"/>
+                            Export CSV 
+                        </button>
+                    </div>
+
                     {role === "admin" && (
                         <button onClick={() => { resetForm(); setShowModal(true); }} className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                             + Add Customer
@@ -259,7 +283,7 @@ function Customers() {
                     )}
                 </div> 
 
-                    {filteredUsers.length === 0 ? (
+                    {filteredCustomers.length === 0 ? (
                         <EmptyState message="No users found"/>
                     ) : (
                         <div className="mt-6 w-full overflow-x-auto rounded-1g bg-white dark:bg-slate-900 shadow-md">
@@ -275,34 +299,34 @@ function Customers() {
                                 </thead>
 
                                 <tbody className="divide-y divide-slate-700">
-                                    {paginatedUsers.map((user) => (
-                                        <tr key={user.id} className = "hover:bg-slate-700/50 transition-colors">
+                                    {paginatedCustomers.map((cust) => (
+                                        <tr key={cust.id} className = "hover:bg-slate-700/50 transition-colors">
                                             <td className="px-6 py-4 text-center">{user.name}
                                                 <div className="flex justify-center gap-3">
                                                     {role === "admin" && (
-                                                        <button onClick={() => handleEdit(user)} className="text-black dark:text-blue-400">
+                                                        <button onClick={() => handleEdit(cust)} className="text-black dark:text-blue-400">
                                                             Edit
                                                         </button>
                                                     )}
 
                                                     {role === "admin" && (
-                                                        <button onClick={() => handleDelete(user.id)} className="text-red-400">
+                                                        <button onClick={() => handleDelete(cust.id)} className="text-red-400">
                                                             <RiDeleteBin6Line/>
                                                         </button>
                                                     )}
                                                     
                                                     {role === "admin" && (
-                                                        <button onClick={() => handleStatusToggle(user)} className={`relative h-6 w-12 rounded-full transition ${user.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
-                                                            <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${user.status === "active" ? "left-7" : "left-1"}`}/>
+                                                        <button onClick={() => handleStatusToggle(cust)} className={`relative h-6 w-12 rounded-full transition ${cust.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
+                                                            <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${customer.status === "active" ? "left-7" : "left-1"}`}/>
                                                         </button>
                                                     )}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-black dark:text-slate-300">{user.email}</td>
-                                            <td className="px-6 py-4 text-black dark:text-slate-300 whitespace-nowrap">{user.phone || "-"}</td>
-                                            <td className="px-6 py-4 text-black dark:text-slate-400">{user.website || "-"}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-300">{cust.email}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-300 whitespace-nowrap">{cust.phone || "-"}</td>
+                                            <td className="px-6 py-4 text-black dark:text-slate-400">{cust.website || "-"}</td>
                                             <td className="px-6 py-4 text-black dark:text-slate-400">
-                                                <div className={`rounded-full px-3 py-1 text-xs font-semibold ${user.status === "active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>{user.status}</div>
+                                                <div className={`rounded-full px-3 py-1 text-xs font-semibold ${cust.status === "active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>{cust.status}</div>
                                             </td>
                                         </tr>
                                     ))}
