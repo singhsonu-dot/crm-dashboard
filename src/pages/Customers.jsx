@@ -130,7 +130,7 @@ function Customers() {
     }
 
     const [customers, setCustomers] = useState([])
-    const [searchTerm, setSearchTerm] = useState('')
+    // const [searchTerm, setSearchTerm] = useState('')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [name, setName] = useState("")
@@ -183,12 +183,18 @@ function Customers() {
     }
 
     // Filter logic: Checks both Name and Email properly
-    const filteredCustomers = customers.filter(customer => 
-        customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    const customerList = users || []
+    const filteredCustomers = customerList.filter(customer => 
+        customer.name?.toLowerCase().includes(search.toLowerCase()) ||
+        customer.email?.toLowerCase().includes(search.toLowerCase())
     )
 
     const handleExportCSV = () => {
+        if (filteredCustomers.length === 0) {
+            toast.error("No data available to export!")
+            return
+        }
+
         const dataToExport = filteredCustomers.map(cust => ({
             ID: cust.id,
             Name: cust.name || "",
@@ -196,7 +202,7 @@ function Customers() {
             Phone: cust.phone || 'N/A',
             website: cust.website || "N/A",
             Status: cust.status || "inactive",
-            'Joined Date': cust.created_at
+            'Joined Date': cust.created_at || "N/A"
         }))
 
         exportToCSV(dataToExport, `Customers_Export_${new Date().toISOString().slice(0, 10)}.csv`)
@@ -286,7 +292,7 @@ function Customers() {
                     {filteredCustomers.length === 0 ? (
                         <EmptyState message="No users found"/>
                     ) : (
-                        <div className="mt-6 w-full overflow-x-auto rounded-1g bg-white dark:bg-slate-900 shadow-md">
+                        <div className="mt-6 w-full overflow-x-auto rounded-lg bg-white dark:bg-slate-900 shadow-md">
                             <table className="w-full border-collapse text-left text-black dark:text-white min-w-187.5 md:min-w-full">
                                 <thead className="bg-gray-100 dark:bg-slate-600">
                                     <tr className="border-b border-slate-700 text-xs uppercase tracking-wide text-black dark:text-white">
@@ -301,7 +307,7 @@ function Customers() {
                                 <tbody className="divide-y divide-slate-700">
                                     {paginatedCustomers.map((cust) => (
                                         <tr key={cust.id} className = "hover:bg-slate-700/50 transition-colors">
-                                            <td className="px-6 py-4 text-center">{user.name}
+                                            <td className="px-6 py-4 text-center">{cust.name}
                                                 <div className="flex justify-center gap-3">
                                                     {role === "admin" && (
                                                         <button onClick={() => handleEdit(cust)} className="text-black dark:text-blue-400">
@@ -317,7 +323,7 @@ function Customers() {
                                                     
                                                     {role === "admin" && (
                                                         <button onClick={() => handleStatusToggle(cust)} className={`relative h-6 w-12 rounded-full transition ${cust.status === "active" ? "bg-green-500" : "bg-red-500"}`}>
-                                                            <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${customer.status === "active" ? "left-7" : "left-1"}`}/>
+                                                            <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${cust.status === "active" ? "left-7" : "left-1"}`}/>
                                                         </button>
                                                     )}
                                                 </div>
