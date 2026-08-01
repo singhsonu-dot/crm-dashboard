@@ -21,27 +21,28 @@ function Settings() {
     const {
         register: profileRegister,
         handleSubmit: handleProfileSubmit,
-        watch,
         formState: { errors: profileErrors },
     } = useForm()
 
-     const {
+    const {
         register: passwordRegister,
         handleSubmit: handlePasswordSubmit,
+        watch,
         formState: { errors: passwordErrors },
     } = useForm()
 
-     const addNotification = useNotificationStore((state) => state.addNotification)
-     const updateProfile = useStore((state) => state.updateProfile)
-     const role = useRoleStore((state) => state.role)
-     const isDark = useThemeStore((state) => state.isDark) 
-     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
-     const handleLogout = async () => {
+    const addNotification = useNotificationStore((state) => state.addNotification)
+    const updateProfile = useStore((state) => state.updateProfile)
+    const role = useRoleStore((state) => state.role)
+    const isDark = useThemeStore((state) => state.isDark) 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme) 
+
+    const handleLogout = async () => {
         try {
             await logout()
             navigate("/", { replace: true })
         } catch (error) {
-            toast.error(error)
+            toast.error(error?.message || "Logout failed")
         }
     }
 
@@ -62,13 +63,8 @@ function Settings() {
         toast.success("Password Update")
     }
 
-    const handleToggle = (
-        label,
-        value,
-        setter
-    ) => {
+    const handleToggle = (label, value, setter) => {
         setter(!value)
-
         addNotification(`${label} ${!value ? "Enable" : "Disable"}`)
         toast.success(`${label} ${!value ? "Enable" : "Disable"}`)
     }
@@ -76,11 +72,10 @@ function Settings() {
     if (role === "viewer") {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-slate-900">
-                <div className="rounded-1g bg-gray-100 dark:bg-slate-800 p-8 text-center">
-                    <h2 className="text-2x1 font-bold text-black dark:text-white">
+                <div className="rounded-lg bg-gray-100 dark:bg-slate-800 p-8 text-center">
+                    <h2 className="text-2xl font-bold text-black dark:text-white">
                         Access Denied
                     </h2>
-
                     <p className="mt-3 text-black dark:text-slate-400">
                         Only administrators can access Settings.
                     </p>
@@ -94,25 +89,24 @@ function Settings() {
             <>
             <aside className="hidden bg-white dark:bg-slate-800 p-4 md:flex md:min-h-screen md:w-[250px] md:min-w-[250px] md:flex-col">
                 <Sidebar/>
-
                 <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
-                    <button onClick={toggleTheme} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-slate-200 dark:bg-slate-700 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
+                    <button onClick={toggleTheme} className="flex items-center gap-3 w-full rounded-lg px-4 py-3 bg-slate-200 dark:bg-slate-700 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm">
                       {isDark ? <FaSun size={18}/> : <FaMoon size={18} />}
                     </button>
-                    <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-1g px-4 py-3 bg-blue-500 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
+                    <button onClick={handleLogout} className="flex items-center gap-3 w-full rounded-lg px-4 py-3 bg-blue-500 text-xs md:text-sm font-medium text-white md:px-3 hover:bg-blue-600">Logout</button> 
                 </div>
             </aside>
 
             {isSidebarOpen && (
                 <aside className="fixed inset-0 z-50 bg-white dark:bg-slate-800 md:hidden">
                     <div className="flex justify-end p-4">
-                        <button onClick={() => setIsSidebarOpen(false)} className="text-3x1 text-black dark:text-white">X</button>
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-3xl text-black dark:text-white">X</button>
                     </div>
                     <Sidebar/>
 
                     <div className="mt-auto border-t border-slate-700 pt-4 space-y-3">
                         <button onClick={toggleTheme} className="flex w-full items-center gap-3 rounded-md bg-slate-200 dark:bg-slate-700 py-2 transition hover:bg-slate-300 dark:hover:bg-slate-600 text-sm font-medium text-black dark:text-white">
-                          Dadrk Mode  {isDark ? <FaSun size={18}/> : <FaMoon size={18}/>} 
+                          Dark Mode  {isDark ? <FaSun size={18}/> : <FaMoon size={18}/>} 
                         </button>
                         <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md bg-blue-500 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
                             Logout
@@ -128,17 +122,16 @@ function Settings() {
                 </header>
 
                 <section className="mt-6">
-                    <h1 className="text-3x1 font-bold text-black dark:text-white">
+                    <h1 className="text-3xl font-bold text-black dark:text-white">
                         Settings
                     </h1>
-
                     <p className="mt-2 text-black dark:text-white">
                         Manage your profile settings. 
                     </p>
                 </section>
 
-                <section className="mt-8 rounded-1g bg-gray-100 dark:bg-slate-800 p-6">
-                    <h2 className="mb-6 text-2x1 font-bold text-black dark:text-white">
+                <section className="mt-8 rounded-lg bg-gray-100 dark:bg-slate-800 p-6">
+                    <h2 className="mb-6 text-2xl font-bold text-black dark:text-white">
                         Profile Settings
                     </h2>
 
@@ -146,94 +139,92 @@ function Settings() {
                         <input {...profileRegister("name", {
                             required: "Name is required",
                         })}
-                        placeholder="Name" className="w-full-rounded-1g p-3 text-slate-700 dark:text-slate-300"/>
+                        placeholder="Name" className="w-full rounded-lg p-3 text-slate-700 dark:text-slate-300"/>
 
                         {profileErrors.name && (
                             <p className="mt-1 text-sm text-red-400"> 
-                                {errors.name.message}
+                                {profileErrors.name.message}
                             </p>
                         )}
 
                         <input {...profileRegister("email", {
                             required: "Email is required",
                         })}
-                        placeholder="Email" className="w-full rounded-1g p-3 text-slate-700 dark:text-slate-300"/>
+                        placeholder="Email" className="w-full rounded-lg p-3 text-slate-700 dark:text-slate-300"/>
 
                         {profileErrors.email && (
                             <p className="text-red-400">
-                                {errors.email.message}
+                                {profileErrors.email.message}
                             </p>
                         )}
 
-                        <input {...profileRegister("phone")} placeholder="Phone" className="w-full rounded-1g p-3 text-slate-700 dark:text-slate-300"/>
+                        <input {...profileRegister("phone")} placeholder="Phone" className="w-full rounded-lg p-3 text-slate-700 dark:text-slate-300"/>
 
-                        <textarea {...profileRegister("bio")} placeholder="Bio" rows="4" className="w-full rounded-1g p-3 text-slate-700 dark:text-slate-300"/>
+                        <textarea {...profileRegister("bio")} placeholder="Bio" rows="4" className="w-full rounded-lg p-3 text-slate-700 dark:text-slate-300"/>
 
-                        <button type="submit" className="rounded-1g bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600">Save Changes</button>
+                        <button type="submit" className="rounded-lg bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600">Save Changes</button>
                     </form>
                 </section>
 
-                <section className="mt-8 rounded-1g bg-gray-100 dark:bg-slate-800 p-6">
-                    <h2 className="mb-6 text-2x1 font-bold">
+                <section className="mt-8 rounded-lg bg-gray-100 dark:bg-slate-800 p-6">
+                    <h2 className="mb-6 text-2xl font-bold">
                         Account Settings
                     </h2>
 
                     <form onSubmit={handlePasswordSubmit(handlePasswordUpdate)} className="space-y-4">
-                        <input type="password" placeholder="Current Password" {...passwordRegister("Current Password", {
+                        <input type="password" placeholder="Current Password" {...passwordRegister("currentPassword", {
                             required: "Current password is required", 
                         })}
-                        className="w-full rounded-1g p-3 text-black dark:text-white"/>
+                        className="w-full rounded-lg p-3 text-black dark:text-white"/>
 
                         {passwordErrors.currentPassword && (
                             <p className="text-red-400">
-                                {errors.currentPassword.message}
+                                {passwordErrors.currentPassword.message}
                             </p>
                         )}
 
                         <input type="password" placeholder="New Password" {...passwordRegister("newPassword", {
                             required: "New password is required",
                         })}
-                        className="w-full rounded-1g p-3 text-black dark:text-white"/>
+                        className="w-full rounded-lg p-3 text-black dark:text-white"/>
 
                         {passwordErrors.newPassword && (
                             <p className="text-red-400">
-                                {errors.newPassword.message}
+                                {passwordErrors.newPassword.message}
                             </p>
                         )}
 
                         <input type="password" placeholder="Confirm Password" {...passwordRegister("confirmPassword", {
-                            required: "Current password is required",
+                            required: "Confirm password is required",
                             validate: (value) => value === newPassword || "Passwords do not match", 
                         })}
-                        className="w-full rounded-1g p-3 text-black dark:text-white"/>
+                        className="w-full rounded-lg p-3 text-black dark:text-white"/>
 
                         {passwordErrors.confirmPassword && (
                             <p className="text-red-400">
-                                {errors.confirmPassword.message}
+                                {passwordErrors.confirmPassword.message}
                             </p>
                         )}
 
-                        <button type="submit" className="rounded-1g bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600">
+                        <button type="submit" className="rounded-lg bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600">
                             Update Password
                         </button>
-                        </form>            
+                    </form>            
                 </section>
 
-                <section className="mt-8 rounded-1g bg-gray-100 dark:bg-slate-800 p-6">
-                    <h2 className="mb-6 text-2x1 font-bold text-black dark:text-white">
+                <section className="mt-8 rounded-lg bg-gray-100 dark:bg-slate-800 p-6">
+                    <h2 className="mb-6 text-2xl font-bold text-black dark:text-white">
                         Preferences
                     </h2>
 
                     <div className="mb-4 flex items-center justify-between">
                         <div>
                             <h3 className="font-medium">Email Notifications</h3>
-
                             <p className="text-sm text-black dark:text-slate-400">
                                 Recieve account alerts
                             </p>
                         </div>
-
-                        <button onClick={() => handleToggle("Email Notifications", emailNotifications, setEmailNotifications)} className={`rounded-1g px-4 py-2 text-sm font-medium ${emailNotifications ? "bg-green-500" : "bg-slate-600"}`}>
+                        <button onClick={() => handleToggle("Email Notifications", emailNotifications, setEmailNotifications)} className={`rounded-lg px-4 py-2 text-sm font-medium ${emailNotifications ? "bg-green-500" : "bg-slate-600"}`}>
                             {emailNotifications ? "Enable" : "Disable"}
                         </button>
                     </div>
@@ -241,13 +232,11 @@ function Settings() {
                     <div className="mb-4 flex items-center justify-between">
                         <div>
                             <h3 className="font-medium">Marketing Emails</h3>
-
                             <p className="text-sm text-black dark:text-slate-400">
                                 Recieve marketing alerts
                             </p>
                         </div>
-
-                        <button onClick={() => handleToggle("Marketing Notfications", marketingEmails, setMarketingEmails)} className={`rounded-1g px-4 py-2 text-sm font-medium ${marketingEmails ? "bg-green-500" : "bg-slate-600"}`}>
+                        <button onClick={() => handleToggle("Marketing Notifications", marketingEmails, setMarketingEmails)} className={`rounded-lg px-4 py-2 text-sm font-medium ${marketingEmails ? "bg-green-500" : "bg-slate-600"}`}>
                             {marketingEmails ? "Enable" : "Disable"}
                         </button>
                     </div>
@@ -255,13 +244,11 @@ function Settings() {
                     <div className="mb-4 flex items-center justify-between">
                         <div>
                             <h3 className="font-medium">Product Emails</h3>
-
                             <p className="text-sm text-black dark:text-slate-400">
                                 Recieve product alerts
                             </p>
                         </div>
-
-                        <button onClick={() => handleToggle("Product Notfications", productUpdates, setProductUpdates)} className={`rounded-1g px-4 py-2 text-sm font-medium ${productUpdates ? "bg-green-500" : "bg-slate-600"}`}>
+                        <button onClick={() => handleToggle("Product Notifications", productUpdates, setProductUpdates)} className={`rounded-lg px-4 py-2 text-sm font-medium ${productUpdates ? "bg-green-500" : "bg-slate-600"}`}>
                             {productUpdates ? "Enable" : "Disable"}
                         </button>
                     </div>
