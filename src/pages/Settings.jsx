@@ -10,6 +10,8 @@ import { FaMoon, FaSun } from "react-icons/fa"
 import useThemeStore from "../store/themeStore"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../services/authService"
+import axios from "axios"
+
 
 function Settings() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -17,6 +19,8 @@ function Settings() {
     const [marketingEmails, setMarketingEmails] = useState(false)
     const [productUpdates, setProductUpdates] = useState(true)
     const navigate = useNavigate()
+
+
 
     const {
         register: profileRegister,
@@ -37,6 +41,20 @@ function Settings() {
     const isDark = useThemeStore((state) => state.isDark) 
     const toggleTheme = useThemeStore((state) => state.toggleTheme) 
 
+    const sendEmailAlert = async (recipientEmail, subject, message) => {
+        try {
+            await axios.post("http://localhost:5000/api/v1/send-email", {
+                to: recipientEmail || "singhsonu89860@gmail.com",
+                subject: subject,
+                message: message 
+            });
+            toast.success("Email notification sent!")
+        } catch (error) {
+            console.error("Email trigger error:", error)
+            toast.error("Failed to send email alert")
+        }
+    }
+
     const handleLogout = async () => {
         try {
             await logout()
@@ -56,17 +74,36 @@ function Settings() {
 
         addNotification("Profile updated")
         toast.success("Profile updated")
+
+        sendEmailAlert(
+            data.email,
+            "CRM Alert: Profile Updated",
+            `Hello ${data.name}, your profile details were updated successfully!`
+        )
     } 
 
     const handlePasswordUpdate = () => {
         addNotification("Password Update")
         toast.success("Password Update")
+
+        sendEmailAlert(
+            "singhsonu89860@gmail.com",
+            "CRM Security Alert: Password Updated",
+            "Your Account Password was updated successfully. If this was'nt you, please secure your account immediately."
+        )
     }
 
-    const handleToggle = (label, value, setter) => {
-        setter(!value)
+    const handleToggle = async (label, value, setter) => {
+        const newValue = !value 
+        setter(newValue)
         addNotification(`${label} ${!value ? "Enable" : "Disable"}`)
         toast.success(`${label} ${!value ? "Enable" : "Disable"}`)
+
+        sendEmailAlert(
+            "singhsonu89860@gmail.com",
+            `CRM Preference Alert: ${label}`,
+            `Your setting for ${label} has been changed to: ${newValue ? "ENABLED" : "DISABLED"}`
+        )
     }
 
     if (role === "viewer") {
